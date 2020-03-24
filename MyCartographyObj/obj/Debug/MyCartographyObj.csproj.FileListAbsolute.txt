@@ -1,0 +1,17 @@
+D:\C#projets\ConsoleApp1\MyCartographyObj\obj\Debug\MyCartographyObj.csprojAssemblyReference.cache
+D:\C#projets\ConsoleApp1\MyCartographyObj\bin\Debug\MyCartographyObj.dll
+D:\C#projets\ConsoleApp1\MyCartographyObj\bin\Debug\MyCartographyObj.pdb
+D:\C#projets\ConsoleApp1\MyCartographyObj\bin\Debug\MathUtil.dll
+D:\C#projets\ConsoleApp1\MyCartographyObj\bin\Debug\MathUtil.pdb
+D:\C#projets\ConsoleApp1\MyCartographyObj\obj\Debug\MyCartographyObj.csproj.CopyComplete
+D:\C#projets\ConsoleApp1\MyCartographyObj\obj\Debug\MyCartographyObj.dll
+D:\C#projets\ConsoleApp1\MyCartographyObj\obj\Debug\MyCartographyObj.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\MyCartographyObj.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\MyCartographyObj.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\MathUtil.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\MathUtil.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.csprojAssemblyReference.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.csproj.CopyComplete
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.csproj.CoreCompileInputs.cache

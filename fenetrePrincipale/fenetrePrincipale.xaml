@@ -1,0 +1,63 @@
+﻿<Window x:Class="fenetrePrincipale.FenetrePrincipale"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:fenetrePrincipale"
+        mc:Ignorable="d"       
+        Title="Fenêtre Principale" Height="450" Width="800" Closed="Window_Closed">
+    <!--<Grid>
+        
+    </Grid>-->
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="menu_file_open" Header="_Open" InputGestureText="Ctrl+O" Click="MenuFileOpen_Click"/>
+                <MenuItem x:Name="menu_file_save" Header="_Save" InputGestureText="Ctrl+S" Click="MenuFileSave_Click">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/saveIcon.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="menu_file_POI" Header="_POI">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/poiIcon.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem x:Name="menu_file_POI_import" Header="Import" StaysOpenOnClick="True" Click="MenuFilePOIImport_Click"/>
+                    <MenuItem x:Name="menu_file_POI_export" Header="Export" StaysOpenOnClick="True" Click="MenuFilePOIExport_Click"/>
+                </MenuItem>
+
+                <MenuItem x:Name="menu_file_trajet" Header="_Trajet">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/trajetIcon.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem x:Name="menu_file_trajet_import" Header="Import" StaysOpenOnClick="True" Click="MenuFileTrajetImport_Click"/>
+                    <MenuItem x:Name="menu_file_trajet_export" Header="Export" StaysOpenOnClick="True" Click="MenuFileTrajetExport_Click"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="menu_file_exit" Header="E_xit" InputGestureText="Ctrl+X" Click="MenuFileExit_Click">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/exitIcon.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="_Tools">
+                <MenuItem x:Name="menu_tools_options" Header="_Options" Click="MenuToolsOptions_Click">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/settingIcon.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="menu_tools_about" Header="_About" Click="MenuToolsAbout_Click">
+                    <MenuItem.Icon>
+                        <Image Source="./ressources/informationIcon.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+        
+        
+    </DockPanel>
+</Window>

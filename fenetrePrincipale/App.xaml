@@ -1,0 +1,9 @@
+﻿<Application x:Class="fenetrePrincipale.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:fenetrePrincipale"
+             StartupUri="fenetrePrincipale.xaml">
+    <Application.Resources>
+        
+    </Application.Resources>
+</Application>

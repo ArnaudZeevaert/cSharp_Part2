@@ -1,0 +1,11 @@
+D:\C#projets\ConsoleApp1\MathUtil\bin\Debug\MathUtil.dll
+D:\C#projets\ConsoleApp1\MathUtil\bin\Debug\MathUtil.pdb
+D:\C#projets\ConsoleApp1\MathUtil\obj\Debug\MathUtil.dll
+D:\C#projets\ConsoleApp1\MathUtil\obj\Debug\MathUtil.pdb
+D:\C#projets\ConsoleApp1\MathUtil\obj\Debug\MathUtil.csprojAssemblyReference.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\bin\Debug\MathUtil.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\bin\Debug\MathUtil.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\obj\Debug\MathUtil.csprojAssemblyReference.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\obj\Debug\MathUtil.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\obj\Debug\MathUtil.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MathUtil\obj\Debug\MathUtil.csproj.CoreCompileInputs.cache
