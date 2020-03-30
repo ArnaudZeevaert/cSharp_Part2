@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyCartographyObj
 {
+    [Serializable]
     public abstract class CartoObj
     {
         #region VARIABLES MEMBRES   

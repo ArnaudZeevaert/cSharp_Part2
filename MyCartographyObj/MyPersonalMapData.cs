@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MyCartographyObj
 {
@@ -16,7 +17,7 @@ namespace MyCartographyObj
         private string _nom;
         private string _prenom;
         private string _email;
-        private ObservableCollection<CartoObj> _observableCollection;
+        private ObservableCollection<ICartoObj> _observableCollection;
 
         
         #endregion
@@ -58,36 +59,24 @@ namespace MyCartographyObj
                 } 
             }
         }
-        public ObservableCollection<CartoObj> ObservableCollection
+        public ObservableCollection<ICartoObj> ObservableCollection
         {
             get { return _observableCollection; }
         }
-        private ObservableCollection<CartoObj> SETObservableCollection
-        {
-            set
+        public void SETObservableCollection(ObservableCollection<ICartoObj> newObservableCollection)
+        {                      
+            if (_observableCollection != newObservableCollection)
             {
-                bool isICartoObj = true;
-                if (_observableCollection != value)
+                if (newObservableCollection == null)
                 {
-                    foreach(CartoObj o in value)
-                    {
-                        if (!(o is ICartoObj))
-                        {
-                            isICartoObj = false;//si 1 des CartoObj de la collection n'implémente pas ICartoObj, --> on n'ajoute pas la collection
-                        }
-                    }
-                    if (isICartoObj)
-                    {
-                        _observableCollection = value;
-                        OnPropertyChanged();
-                    }
-                    else if (_observableCollection == null)
-                    {
-                        _observableCollection = new ObservableCollection<CartoObj>();
-                    }
-                } 
-                
-            }
+                    _observableCollection = new ObservableCollection<ICartoObj>();
+                }
+                else
+                {
+                    _observableCollection = newObservableCollection;
+                    OnPropertyChanged();
+                }             
+            }                             
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,23 +90,23 @@ namespace MyCartographyObj
         #endregion
 
         #region CONSTRUCTEURS
-        public MyPersonalMapData() : this("NOM", "PRENOM", "E-MAIL" , new ObservableCollection<CartoObj>())
+        public MyPersonalMapData() : this("NOM", "PRENOM", "E-MAIL" , new ObservableCollection<ICartoObj>())
         {
 
         }
-        public MyPersonalMapData(string newNom, string newPrenom, string newEmail, ObservableCollection<CartoObj> newObservableCollection)
+        public MyPersonalMapData(string newNom, string newPrenom, string newEmail, ObservableCollection<ICartoObj> newObservableCollection)
         {
             Nom = newNom;
             Prenom = newPrenom;
             Email = newEmail;
-            SETObservableCollection = newObservableCollection;
+            SETObservableCollection(newObservableCollection);
         }
         #endregion
 
         #region METHODE
         public void ResetObservableCollection()
         {
-            SETObservableCollection = new ObservableCollection<CartoObj>();
+            SETObservableCollection(new ObservableCollection<ICartoObj>());
         }
 
         public static MyPersonalMapData LoadFile(string cheminDacces)
@@ -129,21 +118,39 @@ namespace MyCartographyObj
                 {
                     if (File.Exists(cheminDacces))
                     {
-                        MyPersonalMapData personneTMP = new MyPersonalMapData();
-                        using (BinaryReader readFile = new BinaryReader(File.Open(cheminDacces, FileMode.Open)))
+                        /* MyPersonalMapData personneTMP = new MyPersonalMapData();
+                         using (BinaryReader readFile = new BinaryReader(File.Open(cheminDacces, FileMode.Open)))
+                         {
+                             //lecture du nom...
+                             personneTMP.Nom = readFile.ReadString();
+
+                             //lecture du prénom...
+                             personneTMP.Prenom = readFile.ReadString();
+
+                             //lecture du Email...
+                             personneTMP.Email = readFile.ReadString();
+
+                             //(pas encore fait) --> lire la collection de cartoObj
+
+                             ret_val = personneTMP;
+                         }*/
+                        BinaryFormatter binFormat = new BinaryFormatter();
+                        ret_val = new MyPersonalMapData();
+                        try
                         {
-                            //lecture du nom...
-                            personneTMP.Nom = readFile.ReadString();
-
-                            //lecture du prénom...
-                            personneTMP.Prenom = readFile.ReadString();
-
-                            //lecture du Email...
-                            personneTMP.Email = readFile.ReadString();
-
-                            //(pas encore fait) --> lire la collection de cartoObj
-
-                            ret_val = personneTMP;
+                            Stream fStream = new FileStream(cheminDacces, FileMode.Open, FileAccess.Read);
+                            if (fStream == null)
+                                return null;
+                            ret_val.Prenom = (string)binFormat.Deserialize(fStream);
+                            ret_val.Nom = (string)binFormat.Deserialize(fStream);
+                            ret_val.Email = (string)binFormat.Deserialize(fStream);
+                            ret_val.SETObservableCollection((ObservableCollection<ICartoObj>)binFormat.Deserialize(fStream));
+                            fStream.Close();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("LoadFile : Erreur : {0}", e.Message);
+                            return null;
                         }
                     }
                     else
@@ -264,29 +271,43 @@ namespace MyCartographyObj
             }
             
             Console.WriteLine("DEBUG : SavePersonne : emplacement (avec nom de fichier) = {0}", nomFichier);
-            
+
+            /* try
+             {
+                 using (BinaryWriter ecritureFichier = new BinaryWriter(File.Open(nomFichier, FileMode.Create)))
+                 {
+                     //écriture du nom...
+                     ecritureFichier.Write(personneAsauvegardee.Nom);
+
+                     //écriture du prénom...
+                     ecritureFichier.Write(personneAsauvegardee.Prenom);
+
+                     //écriture du Email...
+                     ecritureFichier.Write(personneAsauvegardee.Email);
+
+                     //(pas encore fait) --> sauvegarder la collection de cartoObj
+                 }
+             }
+             catch(Exception e)
+             {
+                 Console.WriteLine("SavePersonne : Erreur : {0}", e.Message);
+                 return false;
+             }*/
             try
             {
-                using (BinaryWriter ecritureFichier = new BinaryWriter(File.Open(nomFichier, FileMode.Create)))
-                {
-                    //écriture du nom...
-                    ecritureFichier.Write(personneAsauvegardee.Nom);
-
-                    //écriture du prénom...
-                    ecritureFichier.Write(personneAsauvegardee.Prenom);
-
-                    //écriture du Email...
-                    ecritureFichier.Write(personneAsauvegardee.Email);
-
-                    //(pas encore fait) --> sauvegarder la collection de cartoObj
-                }
+                BinaryFormatter binFormat = new BinaryFormatter();
+                Stream fStream = new FileStream(nomFichier, FileMode.Create, FileAccess.Write, FileShare.None);
+                binFormat.Serialize(fStream, personneAsauvegardee.Prenom);
+                binFormat.Serialize(fStream, personneAsauvegardee.Nom);
+                binFormat.Serialize(fStream, personneAsauvegardee.Email);
+                binFormat.Serialize(fStream, personneAsauvegardee.ObservableCollection);
+                fStream.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("SavePersonne : Erreur : {0}", e.Message);
                 return false;
             }
-
             Console.WriteLine("Debug : SavePersonne : save ok ? : {0}", ret_val);
 
             return ret_val;
@@ -294,7 +315,7 @@ namespace MyCartographyObj
         public override string ToString()
         {
             string CollectionDeCartoObjEn1Ligne = "";
-            if (ObservableCollection.Count >0)
+            if (ObservableCollection != null && ObservableCollection.Count > 0)
             {
                 foreach (CartoObj o in ObservableCollection)
                 {
@@ -305,8 +326,8 @@ namespace MyCartographyObj
             {
                 CollectionDeCartoObjEn1Ligne = "Pas de ObservableCollection...";
             }
-            return "Nom : " + Nom + " Prenom : " + Prenom + " Email : " + Email + "\nObservableCollection : " + CollectionDeCartoObjEn1Ligne;
-        }
+            return "--- Nom ---\n" + Nom + "\n--- Prenom ---\n" + Prenom + "\n--- Email ---\n" + Email + "\n--- ObservableCollection ---\n" + CollectionDeCartoObjEn1Ligne;
+        }       
 
         #endregion
 

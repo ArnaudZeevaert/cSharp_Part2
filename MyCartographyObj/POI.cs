@@ -7,6 +7,7 @@ using MathUtil;
 
 namespace MyCartographyObj
 {
+    [Serializable]
     public class POI : Coordonnees, IisPointClose, ICartoObj
     {
         #region VARIABLES MEMBRES   

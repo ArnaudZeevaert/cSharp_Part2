@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyCartographyObj
 {
-    interface ICartoObj
+    public interface ICartoObj
     {
     }
 }

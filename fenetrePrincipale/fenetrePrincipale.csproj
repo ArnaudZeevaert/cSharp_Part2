@@ -118,5 +118,8 @@
   <ItemGroup>
     <Resource Include="ressources\trajetIcon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ressources\logoGPS.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

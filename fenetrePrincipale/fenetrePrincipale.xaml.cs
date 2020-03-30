@@ -25,7 +25,7 @@ namespace fenetrePrincipale
     public partial class FenetrePrincipale : Window
     {
         #region VARIABLES MEMBRES
-        private MyPersonalMapData _personneConnectee;
+        private MyPersonalMapData _personneConnectee = new MyPersonalMapData();
         #endregion
 
         #region PROPRIETES
@@ -39,14 +39,16 @@ namespace fenetrePrincipale
         #region CONSTRUCTEURS
         public FenetrePrincipale()
         {
-            PersonneConnectee = new MyPersonalMapData();
+            
             InitializeComponent();
+            TextDebug.Content = PersonneConnectee.ToString();
         }
 
         public FenetrePrincipale(MyPersonalMapData personne)
         {
-            PersonneConnectee = personne;
+            PersonneConnectee = personne;      
             InitializeComponent();
+            TextDebug.Content = PersonneConnectee.ToString();
         }
         #endregion
 
@@ -74,6 +76,7 @@ namespace fenetrePrincipale
             {
                 MessageBox.Show("OUVERTURE REUSSIE", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 PersonneConnectee = personneTMP;
+                TextDebug.Content = PersonneConnectee.ToString();
             }
         }
 

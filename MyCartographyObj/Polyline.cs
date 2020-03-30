@@ -8,17 +8,23 @@ using MathUtil;
 
 namespace MyCartographyObj
 {
+    [Serializable]
     public class Polyline : CartoObj, IPointy, IisPointClose, IComparable<Polyline>, IEquatable<Polyline>, ICartoObj
     {
         #region VARIABLES MEMBRES
         public List<Coordonnees> _collectionDeCoordonnees;
-        private Color _couleur;
+        private string _couleur;
         private int _epaisseur;
         private int _nbPoints;
         #endregion
 
         #region PROPRIETE
         public Color Couleur
+        {
+            set { _couleur = value.ToString(); }
+            get { return (Color)ColorConverter.ConvertFromString(_couleur); }
+        }
+        public string CouleurString
         {
             set { _couleur = value; }
             get { return _couleur; }

@@ -312,46 +312,31 @@ namespace ConsoleApp1
             Console.WriteLine("---------MyPersonalMapData---------");
             Console.WriteLine("-----------------------------------");
 
-            MyPersonalMapData TestmyPersonalMapData = new MyPersonalMapData();
-            Console.WriteLine("MyPersonalMapData : constructeur par defaut");
-            Console.WriteLine(TestmyPersonalMapData.ToString());
+            //MyPersonalMapData TestmyPersonalMapData = new MyPersonalMapData();
+            //Console.WriteLine("MyPersonalMapData : constructeur par defaut");
+            //Console.WriteLine(TestmyPersonalMapData.ToString());
 
-            Console.WriteLine("\nConstructeur avec paramètres...");
-            string nom;
-            Console.Write("Saisir votre nom : "); nom = Console.ReadLine();
-            string prenom;
-            Console.Write("Saisir votre prenom : "); prenom = Console.ReadLine();
-            string email;
-            Console.Write("Saisir votre email : "); email = Console.ReadLine();
+            //Console.WriteLine("\nConstructeur avec paramètres...");
+            //string nom;
+            //Console.Write("Saisir votre nom : "); nom = Console.ReadLine();
+            //string prenom;
+            //Console.Write("Saisir votre prenom : "); prenom = Console.ReadLine();
+            //string email;
+            //Console.Write("Saisir votre email : "); email = Console.ReadLine();
 
             
-            ObservableCollection<CartoObj> newObservableCollectionCartoObj = new ObservableCollection<CartoObj>();
-            foreach (CartoObj o in listeDeCartoObj)
-            {
-                newObservableCollectionCartoObj.Add(o);
-            }
+            ObservableCollection<ICartoObj> newObservableCollectionCartoObj = new ObservableCollection<ICartoObj>();
+            newObservableCollectionCartoObj.Add(Sraing);
+            newObservableCollectionCartoObj.Add(P1);
+            newObservableCollectionCartoObj.Add(PNtriangle);
             MyPersonalMapData Test2myPersonalMapData = new MyPersonalMapData("zeevaert", "arnaud", "az@gmail.com", newObservableCollectionCartoObj);
             Console.WriteLine("MyPersonalMapData : new MyPersonalMapData(zeevaert, arnaud, az@gmail.com, listeDeCartoObj);");
             Console.WriteLine(Test2myPersonalMapData.ToString());
 
-            /*Console.WriteLine("Test de save personne");         
-            if (MyPersonalMapData.SavePersonne(Test2myPersonalMapData))
-                Console.WriteLine("save ok");
-            else
-                Console.WriteLine("save pas ok");
+            MyPersonalMapData.SavePersonne(Test2myPersonalMapData);
 
-            Console.WriteLine("pause...");
             string inutile;
-            inutile = Console.ReadLine();
-
-            Console.WriteLine("Test de load la meme personne");
-            MyPersonalMapData personneTMP;
-            if ((personneTMP = MyPersonalMapData.LoadPersonne(Test2myPersonalMapData)) == null)
-            {
-                Console.WriteLine("personne pas trouve :(");
-            }
-            else
-                Console.WriteLine("Personne trouve :)");*/
+            
 
 
             inutile = Console.ReadLine();

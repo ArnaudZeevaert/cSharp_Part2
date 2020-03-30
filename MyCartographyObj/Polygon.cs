@@ -8,12 +8,13 @@ using MathUtil;
 
 namespace MyCartographyObj
 {
+    [Serializable]
     public class Polygon : CartoObj, IPointy, IisPointClose, ICartoObj
     {
         #region VARIABLE MEMBRES
         public List<Coordonnees> _collectionDeCoordonnees;
-        private Color _couleurDeRemplissage;
-        private Color _couleurDeContour;
+        private string _couleurDeRemplissage;
+        private string _couleurDeContour;
         private double _opacite;
         private int _nbPoints;
         #endregion
@@ -21,10 +22,20 @@ namespace MyCartographyObj
         #region PROPRIETE
         public Color CouleurDeRemplissage
         {
+            set { _couleurDeRemplissage = value.ToString(); }
+            get { return (Color)ColorConverter.ConvertFromString(_couleurDeRemplissage); }
+        }
+        public string CouleurDeRemplissageString
+        {
             set { _couleurDeRemplissage = value; }
             get { return _couleurDeRemplissage; }
         }
         public Color CouleurDeContour
+        {
+            set { _couleurDeContour = value.ToString(); }
+            get { return (Color)ColorConverter.ConvertFromString(_couleurDeContour); }
+        }
+        public string CouleurDeContourString
         {
             set { _couleurDeContour = value; }
             get { return _couleurDeContour; }
