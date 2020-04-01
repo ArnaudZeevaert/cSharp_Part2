@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using getNewId;
 
 namespace MyCartographyObj
 {
@@ -17,12 +18,24 @@ namespace MyCartographyObj
         private string _nom;
         private string _prenom;
         private string _email;
+        private string _emplacement;
         private ObservableCollection<ICartoObj> _observableCollection;
 
         
         #endregion
 
         #region PROPRIETES
+        public string Emplacement
+        {
+            set 
+            { 
+                if(_emplacement != value)
+                {
+                    _emplacement = value;
+                }
+            }
+            get { return _emplacement; }
+        }
         public string Nom
         {
             get { return _nom; }
@@ -89,7 +102,7 @@ namespace MyCartographyObj
         }
         #endregion
 
-        #region CONSTRUCTEURS
+        #region CONSTRUCTEURS       
         public MyPersonalMapData() : this("NOM", "PRENOM", "E-MAIL" , new ObservableCollection<ICartoObj>())
         {
 
@@ -100,6 +113,7 @@ namespace MyCartographyObj
             Prenom = newPrenom;
             Email = newEmail;
             SETObservableCollection(newObservableCollection);
+            Emplacement = null;
         }
         #endregion
 
@@ -118,22 +132,6 @@ namespace MyCartographyObj
                 {
                     if (File.Exists(cheminDacces))
                     {
-                        /* MyPersonalMapData personneTMP = new MyPersonalMapData();
-                         using (BinaryReader readFile = new BinaryReader(File.Open(cheminDacces, FileMode.Open)))
-                         {
-                             //lecture du nom...
-                             personneTMP.Nom = readFile.ReadString();
-
-                             //lecture du prénom...
-                             personneTMP.Prenom = readFile.ReadString();
-
-                             //lecture du Email...
-                             personneTMP.Email = readFile.ReadString();
-
-                             //(pas encore fait) --> lire la collection de cartoObj
-
-                             ret_val = personneTMP;
-                         }*/
                         BinaryFormatter binFormat = new BinaryFormatter();
                         ret_val = new MyPersonalMapData();
                         try
@@ -144,6 +142,7 @@ namespace MyCartographyObj
                             ret_val.Prenom = (string)binFormat.Deserialize(fStream);
                             ret_val.Nom = (string)binFormat.Deserialize(fStream);
                             ret_val.Email = (string)binFormat.Deserialize(fStream);
+                            ret_val.Emplacement = cheminDacces;
                             ret_val.SETObservableCollection((ObservableCollection<ICartoObj>)binFormat.Deserialize(fStream));
                             fStream.Close();
                         }
@@ -168,87 +167,58 @@ namespace MyCartographyObj
             }
             return ret_val;
         }
+
         //output : true si on trouve la personne à l'emplacement demandé, false si on ne la trouve pas
-        public static MyPersonalMapData LoadPersonne(MyPersonalMapData personneRecherchee, string emplacement = @"D:\C#projets\ARNAUD_ZEEVAERT_2226\sauvegarde", string nomFichier = "")
+        public static MyPersonalMapData LoadPersonne(MyPersonalMapData personneRecherchee)
         {
             MyPersonalMapData ret_val = null;
+            string emplacement = @"../../../sauvegarde/";
             try
-            {
-                if(Directory.Exists(emplacement))
+            {                
+                if (Directory.Exists(emplacement))
                 {
                     Console.WriteLine("DEBUG : LoadObservableCollection : le répertoire {0} existe...", emplacement);
                     string[] listeFicher;
                     listeFicher = Directory.GetFiles(emplacement);
-                    if(listeFicher.Length > 0)
+                    if (listeFicher.Length > 0)
                     {
-                        if (nomFichier == "")//rechercher dans tous les fichiers du répertoire
+                        for (int i = 0; i < listeFicher.Length; i++)
                         {
-                            for (int i = 0; i < listeFicher.Length; i++)
+                            if (File.Exists(listeFicher[i]))
                             {
-                                if (File.Exists(listeFicher[i]))
+                                Console.WriteLine("path = " + listeFicher[i]);
+                                MyPersonalMapData personneTMP = new MyPersonalMapData();
+                                using (BinaryReader readFile = new BinaryReader(File.Open(listeFicher[i], FileMode.Open)))
                                 {
-                                    MyPersonalMapData personneTMP = new MyPersonalMapData();
-                                    using (BinaryReader readFile = new BinaryReader(File.Open(listeFicher[i], FileMode.Open)))
+                                    //lecture du nom...
+                                    personneTMP.Nom = readFile.ReadString();
+
+                                    //lecture du prénom...
+                                    personneTMP.Prenom = readFile.ReadString();
+
+                                    //lecture du Email...
+                                    personneTMP.Email = readFile.ReadString();
+
+                                    personneTMP.Emplacement = listeFicher[i];                                        
+
+                                    if (personneTMP.Nom == personneRecherchee.Nom && personneTMP.Prenom == personneRecherchee.Prenom && personneTMP.Email == personneRecherchee.Email)
                                     {
-                                        //lecture du nom...
-                                        personneTMP.Nom = readFile.ReadString();
-
-                                        //lecture du prénom...
-                                        personneTMP.Prenom = readFile.ReadString();
-
-                                        //lecture du Email...
-                                        personneTMP.Email = readFile.ReadString();
-
-                                        //(pas encore fait) --> lire la collection de cartoObj
-
-                                        if (personneTMP.Nom == personneRecherchee.Nom && personneTMP.Prenom == personneRecherchee.Prenom && personneTMP.Email == personneRecherchee.Email)
-                                        {
-                                            ret_val = personneTMP;
-                                            i = listeFicher.Length;
-                                        }
+                                        ret_val = personneTMP;
+                                        i = listeFicher.Length;
                                     }
                                 }
                             }
-                        }
-                        else//rechercher le fichier spécifié en paramètre
-                        {
-                            emplacement = emplacement + @"\" + nomFichier;
-                            Console.WriteLine("DEBUG : LoadObservableCollection : recherche d un fichier specifique : nom du fichier = {0}", emplacement);
-
                         }
                     }
                     else
                     {
                         Console.WriteLine("DEBUG : LoadObservableCollection : le répertoire {0} est vide !!!", emplacement);
-                        if (File.Exists(emplacement))
-                        {
-                            MyPersonalMapData personneTMP = new MyPersonalMapData();
-                            using (BinaryReader readFile = new BinaryReader(File.Open(emplacement, FileMode.Open)))
-                            {
-                                //lecture du nom...
-                                personneTMP.Nom = readFile.ReadString();
-
-                                //lecture du prénom...
-                                personneTMP.Prenom = readFile.ReadString();
-
-                                //lecture du Email...
-                                personneTMP.Email = readFile.ReadString();
-
-                                //(pas encore fait) --> lire la collection de cartoObj
-
-                                if (personneTMP.Nom == personneRecherchee.Nom && personneTMP.Prenom == personneRecherchee.Prenom && personneTMP.Email == personneRecherchee.Email)
-                                {
-                                    ret_val = personneTMP;                              
-                                }
-                            }
-                        }
-                    }    
-
+                    }
                 }
                 else
                 {
                     Console.WriteLine("DEBUG : LoadObservableCollection : le répertoire {0} n existe pas !!! : fin de la fct...", emplacement);
-                }
+                }                
             }
             catch(Exception e)
             {
@@ -257,57 +227,72 @@ namespace MyCartographyObj
             }
             return ret_val;
         }
-        public static bool SavePersonne(MyPersonalMapData personneAsauvegardee, string emplacement = @"D:\C#projets\ARNAUD_ZEEVAERT_2226\sauvegarde", bool nomDeFichierIncluDansL_Emplacement = false)
-        {
-            bool ret_val = true;
-            string nomFichier;
 
-            if (nomDeFichierIncluDansL_Emplacement) nomFichier = emplacement;
-            else nomFichier = emplacement + @"\" + personneAsauvegardee.Prenom + personneAsauvegardee.Nom + ".az";      
+        //INPUT :   un objet MyPersonalMapData a suauvegarder, l'emplacement de la sauvegarde (chemin d'accès avec nom de fichier)
+        //PROCESS : sauvegarde MyPersonalMapData passé en paramètre à l'emplacement spécifie
+        //          si path = null --> on sauvegarde uniquement à l'emplacement par défaut
+        //          si path est différent de l'emplacement par défaut, on sauvagarde à l'emplacement spécifié + l'emplacement par défaut
+        //OUTPUT :  null en cas d'erreur, en cas de succès : return de MyPersonnalMapData passé en paramètre avec son emplacement "path"
+        public static MyPersonalMapData SavePersonne(MyPersonalMapData personneAsauvegardee, string path = null)
+        {            
+            MyPersonalMapData ret_val = null;
+            string nomFichier, directoryPath, emplacementSauvegrade = @"../../../sauvegarde/";
 
-            if(File.Exists(nomFichier))//si un fichier existe déja dans le même emplacement, on le supprime (rip l'ancien fichier)
+            nomFichier = personneAsauvegardee.Nom + personneAsauvegardee.Prenom + IdFichier.GetAnNewId().ToString() + ".az";
+            if (path != null)
             {
-                File.Delete(nomFichier);
+                try
+                {
+                    //nomFichier = Path.GetFileName(path);
+                    directoryPath = Path.GetDirectoryName(path);
+                    path = directoryPath + nomFichier;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("EXCEPTION : SavePersonne (nomDeFichier/directoryPath) : " + e.Message);
+                    return null;
+                }
+            }
+            else
+            {                
+                directoryPath = emplacementSauvegrade;
+                path = emplacementSauvegrade + nomFichier;
             }
             
-            Console.WriteLine("DEBUG : SavePersonne : emplacement (avec nom de fichier) = {0}", nomFichier);
 
-            /* try
-             {
-                 using (BinaryWriter ecritureFichier = new BinaryWriter(File.Open(nomFichier, FileMode.Create)))
-                 {
-                     //écriture du nom...
-                     ecritureFichier.Write(personneAsauvegardee.Nom);
-
-                     //écriture du prénom...
-                     ecritureFichier.Write(personneAsauvegardee.Prenom);
-
-                     //écriture du Email...
-                     ecritureFichier.Write(personneAsauvegardee.Email);
-
-                     //(pas encore fait) --> sauvegarder la collection de cartoObj
-                 }
-             }
-             catch(Exception e)
-             {
-                 Console.WriteLine("SavePersonne : Erreur : {0}", e.Message);
-                 return false;
-             }*/
+            Console.WriteLine("DEBUG : nom du fichier : {0} --- directoryPath : {1} --- emplacementSauvegarde : {2}", nomFichier, directoryPath, emplacementSauvegrade);
+            //if (nomDeFichierIncluDansL_Emplacement) nomFichier = emplacement;
+            //else nomFichier = emplacement + @"\" + personneAsauvegardee.Prenom + personneAsauvegardee.Nom + ".az";      
+            
             try
             {
                 BinaryFormatter binFormat = new BinaryFormatter();
-                Stream fStream = new FileStream(nomFichier, FileMode.Create, FileAccess.Write, FileShare.None);
+                Stream fStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
                 binFormat.Serialize(fStream, personneAsauvegardee.Prenom);
                 binFormat.Serialize(fStream, personneAsauvegardee.Nom);
                 binFormat.Serialize(fStream, personneAsauvegardee.Email);
                 binFormat.Serialize(fStream, personneAsauvegardee.ObservableCollection);
                 fStream.Close();
+
+                //copie du fichier dans : @"D:\C#projets\ARNAUD_ZEEVAERT_2226\sauvegarde" si ce n'est déja pas l'emplacement actuel
+                if(!path.Contains(emplacementSauvegrade))
+                {
+                    Console.WriteLine("DEBUG : copie du fichier dans : D:/C#projets/ARNAUD_ZEEVAERT_2226/sauvegarde si ce n'est déja pas l'emplacement actuel");
+                    emplacementSauvegrade += nomFichier;
+                    Console.WriteLine("DEBUG: emplacement sauvegarde = " + emplacementSauvegrade);
+                    File.Copy(path, emplacementSauvegrade);
+                }
+
+                //sauvegarde de l'emplacement dans l'objet MyPersonnalMapData
+                ret_val = personneAsauvegardee;
+                ret_val.Emplacement = path;
             }
             catch (Exception e)
             {
                 Console.WriteLine("SavePersonne : Erreur : {0}", e.Message);
-                return false;
+                return null;
             }
+            
             Console.WriteLine("Debug : SavePersonne : save ok ? : {0}", ret_val);
 
             return ret_val;
@@ -326,10 +311,69 @@ namespace MyCartographyObj
             {
                 CollectionDeCartoObjEn1Ligne = "Pas de ObservableCollection...";
             }
-            return "--- Nom ---\n" + Nom + "\n--- Prenom ---\n" + Prenom + "\n--- Email ---\n" + Email + "\n--- ObservableCollection ---\n" + CollectionDeCartoObjEn1Ligne;
+            return "--- Nom ---\n" + Nom + "\n--- Prenom ---\n" + Prenom + "\n--- Email ---\n" + Email + "\n--- Path ---\n" + Emplacement + "\n--- ObservableCollection ---\n" + CollectionDeCartoObjEn1Ligne;
         }       
 
+        public static bool readCSVtrajet(MyPersonalMapData personne, string cheminDacces = @"../../../PersonalMap_Manager\Ressources\fichiersCSV\HEPL Seraing Liege Trajet.csv")
+        {
+            Polyline trajet = new Polyline();
+            try
+            {
+                string[] fichier = System.IO.File.ReadAllLines(cheminDacces);
+                
+                for (int i = 0; i < fichier.Length; i++)
+                {
+                    Console.WriteLine("DEBUG line = " + fichier[i]);
+                    string[] donnees;
+                    donnees = fichier[i].Split(';');
+
+                    if (donnees.Length == 3)
+                    {
+                        Console.WriteLine("DEBUG split string[0] = {0}, string[1] = {1}, string[2] = {2}", donnees[0], donnees[1], donnees[2]);
+                        if (donnees[2] == "")
+                            trajet._collectionDeCoordonnees.Add(new Coordonnees(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1])));
+                        else
+                            trajet._collectionDeCoordonnees.Add(new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), donnees[2]));
+                    }
+                    else
+                        trajet._collectionDeCoordonnees.Add(new Coordonnees(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1])));
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error readCSVtrajet : " + e.Message);
+                return false;
+            }
+
+            personne.ObservableCollection.Add(trajet);
+            return true;
+        }
         #endregion
 
     }
+
+    //public static bool saveCSVtrajet(MyPersonalMapData personne, string cheminDacces = @"../../../PersonalMap_Manager\Ressources\fichiersCSV\")
+    //{
+    //    bool ret_val = false;
+    //    cheminDacces += personne.Nom + "." + personne.Prenom + "_observableCollection.csv";
+    //    try
+    //    {
+    //        using (System.IO.StreamWriter file = new System.IO.StreamWriter(cheminDacces, true))
+    //        {
+    //            foreach(ICartoObj o in personne.ObservableCollection)
+    //            {
+    //                if(o is )
+    //            }
+    //            file.WriteLine(Convert.ToString(pOI.Latitude) + ";" + Convert.ToString(pOI.Longitude) + ";" + pOI.Description);
+    //            ret_val = true;
+    //        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Console.WriteLine("error saveCSVfile POI : " + e.Message);
+    //        return false;
+    //    }
+    //    return ret_val;
+    //}
 }

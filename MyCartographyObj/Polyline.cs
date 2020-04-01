@@ -56,7 +56,15 @@ namespace MyCartographyObj
         #region METHODE
         public override string ToString()
         {
-            return base.ToString() + " Collection de coordonnees --> voir Draw" + " / Couleur : " + Couleur + string.Format(" / Epaisseur: {0}", Epaisseur);
+            int i = 0;
+            string collectionEnUneLigne = "";
+            foreach (CartoObj o in _collectionDeCoordonnees)
+            {
+                collectionEnUneLigne += "\n\t(" + i.ToString() + ") " + o.ToString();                
+                i++;
+            }
+            collectionEnUneLigne += "\n";
+            return base.ToString() + " Collection de coordonnees --> " + collectionEnUneLigne + " / Couleur : " + Couleur + string.Format(" / Epaisseur: {0}", Epaisseur);
         }
         public override void Draw()
         {

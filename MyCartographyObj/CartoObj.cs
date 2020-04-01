@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using getNewId;
 
 namespace MyCartographyObj
 {
@@ -10,8 +11,7 @@ namespace MyCartographyObj
     public abstract class CartoObj
     {
         #region VARIABLES MEMBRES   
-        private int _id;
-        private static int s_count;
+        private int _id;        
         #endregion
 
         #region PROPRIETES
@@ -20,18 +20,12 @@ namespace MyCartographyObj
             set { _id = value; }
             get { return _id; }
         }
-        public static int Count
-        {
-            get { return s_count; }
-        }
         #endregion
 
         #region CONSTRUCTEURS
         public CartoObj()
         {
-            s_count++;
-
-            Id = Count;
+            Id = IdFichier.GetAnNewId();
         }
         #endregion
 

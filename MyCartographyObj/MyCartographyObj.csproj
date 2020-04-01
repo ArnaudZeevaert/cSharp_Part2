@@ -56,6 +56,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\getNewId\getNewId.csproj">
+      <Project>{8cbc27bc-20f1-4847-b56d-eee2cf41f13d}</Project>
+      <Name>getNewId</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MathUtil\MathUtil.csproj">
       <Project>{889f4d8f-f47a-4037-8033-39a727da9d0f}</Project>
       <Name>MathUtil</Name>

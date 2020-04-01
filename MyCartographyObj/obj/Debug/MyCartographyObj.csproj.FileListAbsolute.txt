@@ -15,3 +15,5 @@ D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.cs
 D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.dll
 D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.pdb
 D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\obj\Debug\MyCartographyObj.csproj.CoreCompileInputs.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\getNewId.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\MyCartographyObj\bin\Debug\getNewId.pdb

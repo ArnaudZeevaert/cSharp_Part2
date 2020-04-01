@@ -4,64 +4,106 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:fenetrePrincipale"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"       
         Title="Fenêtre Principale" Height="450" Width="800"         
-        Closed="Window_Closed">
-    <!--<Grid>
-        
-    </Grid>-->
-    
-    
+        Closed="Window_Closed" WindowStyle="None">
 
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem x:Name="menu_file_open" Header="_Open" InputGestureText="Ctrl+O" Click="MenuFileOpen_Click"/>
-                <MenuItem x:Name="menu_file_save" Header="_Save" InputGestureText="Ctrl+S" Click="MenuFileSave_Click">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/saveIcon.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="menu_file_POI" Header="_POI">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/poiIcon.png"/>
-                    </MenuItem.Icon>
-                    <MenuItem x:Name="menu_file_POI_import" Header="Import" StaysOpenOnClick="True" Click="MenuFilePOIImport_Click"/>
-                    <MenuItem x:Name="menu_file_POI_export" Header="Export" StaysOpenOnClick="True" Click="MenuFilePOIExport_Click"/>
-                </MenuItem>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="19"/>
+    </WindowChrome.WindowChrome>
 
-                <MenuItem x:Name="menu_file_trajet" Header="_Trajet">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/trajetIcon.png"/>
-                    </MenuItem.Icon>
-                    <MenuItem x:Name="menu_file_trajet_import" Header="Import" StaysOpenOnClick="True" Click="MenuFileTrajetImport_Click"/>
-                    <MenuItem x:Name="menu_file_trajet_export" Header="Export" StaysOpenOnClick="True" Click="MenuFileTrajetExport_Click"/>
-                </MenuItem>
-                <Separator/>
-                <MenuItem x:Name="menu_file_exit" Header="E_xit" InputGestureText="Ctrl+X" Click="MenuFileExit_Click">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/exitIcon.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="19*" MinHeight="44" MaxHeight="44"/>
+            <RowDefinition Height="35*" MinHeight="35" MaxHeight="35"/>
+            <RowDefinition Height="359*"/>
+        </Grid.RowDefinitions>
 
-            <MenuItem Header="_Tools">
-                <MenuItem x:Name="menu_tools_options" Header="_Options" Click="MenuToolsOptions_Click">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/settingIcon.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem x:Name="menu_tools_about" Header="_About" Click="MenuToolsAbout_Click">
-                    <MenuItem.Icon>
-                        <Image Source="./ressources/informationIcon.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
+        <!--<Rectangle Height="280" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF2281D1"/>
+                    <GradientStop Color="#FF34268A" Offset="1"/>
+                    <GradientStop Color="#FF33288B" Offset="0.546"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>-->
 
-        </Menu>
-        <Label x:Name="TextDebug"/>
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF2281D1"/>
+                    <GradientStop Color="#FF34268A" Offset="1"/>
+                    <GradientStop Color="#FF33288B" Offset="0.546"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Image Source="D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetreDeConnexion\images/logoGPS.png" Height="19" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0.4,400"/>
+            <StackPanel Height="40" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Content="-" Name="MinimizeButton" MinWidth="35" MinHeight="19" Height="Auto" Width="35"/>
+                <Button Content="+" Name="MaximizeButton" MinWidth="35" MinHeight="19" Height="Auto" Width="35"/>
+                <Button Content="x" Name="CloseButton" Background="White" Foreground="Gray" MinHeight="19" MinWidth="35" Height="Auto" Width="35" FontSize="10"/>
+                <Button x:Name="CloseBut" BorderThickness="1" Width="29" Height="29" BorderBrush="White">
+                    <Button.Background>
+                        <ImageBrush ImageSource="CroixBlanche.png"/>
+                    </Button.Background>
 
 
-    </DockPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+
+        <DockPanel Grid.Row="1">
+            <Menu>
+                <MenuItem Header="_File" MinWidth="39" MinHeight="35">
+                    <MenuItem x:Name="menu_file_open" Header="_Open" InputGestureText="Ctrl+O" Click="MenuFileOpen_Click"/>
+                    <MenuItem x:Name="menu_file_save" Header="_Save" InputGestureText="Ctrl+S" Click="MenuFileSave_Click">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/saveIcon.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="menu_file_POI" Header="_POI">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/poiIcon.png"/>
+                        </MenuItem.Icon>
+                        <MenuItem x:Name="menu_file_POI_import" Header="Import" StaysOpenOnClick="True" Click="MenuFilePOIImport_Click"/>
+                        <MenuItem x:Name="menu_file_POI_export" Header="Export" StaysOpenOnClick="True" Click="MenuFilePOIExport_Click"/>
+                    </MenuItem>
+
+                    <MenuItem x:Name="menu_file_trajet" Header="_Trajet">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/trajetIcon.png"/>
+                        </MenuItem.Icon>
+                        <MenuItem x:Name="menu_file_trajet_import" Header="Import" StaysOpenOnClick="True" Click="MenuFileTrajetImport_Click"/>
+                        <MenuItem x:Name="menu_file_trajet_export" Header="Export" StaysOpenOnClick="True" Click="MenuFileTrajetExport_Click"/>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem x:Name="menu_file_exit" Header="E_xit" InputGestureText="Ctrl+X" Click="MenuFileExit_Click">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/exitIcon.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem Header="_Tools" MinWidth="39" MinHeight="35">
+                    <MenuItem x:Name="menu_tools_options" Header="_Options" Click="MenuToolsOptions_Click">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/settingIcon.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem x:Name="menu_tools_about" Header="_About" Click="MenuToolsAbout_Click">
+                        <MenuItem.Icon>
+                            <Image Source="./ressources/informationIcon.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+            </Menu>
+        </DockPanel>
+
+        <Label x:Name="TextDebug" Grid.Row="2"/>
+    </Grid>
+
 </Window>

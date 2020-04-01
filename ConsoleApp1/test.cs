@@ -324,7 +324,7 @@ namespace ConsoleApp1
             //string email;
             //Console.Write("Saisir votre email : "); email = Console.ReadLine();
 
-            
+
             ObservableCollection<ICartoObj> newObservableCollectionCartoObj = new ObservableCollection<ICartoObj>();
             newObservableCollectionCartoObj.Add(Sraing);
             newObservableCollectionCartoObj.Add(P1);
@@ -336,6 +336,10 @@ namespace ConsoleApp1
             MyPersonalMapData.SavePersonne(Test2myPersonalMapData);
 
             string inutile;
+
+            Console.WriteLine("save csv POI :");
+            if (POI.saveCSVfile(Sraing)) Console.WriteLine("save ok");
+            else Console.WriteLine("save faild");
             
 
 

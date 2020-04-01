@@ -18,3 +18,9 @@ D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MyCartographyObj.p
 D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MathUtil.pdb
 D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\obj\Debug\fenetrePrincipale.baml
 D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\obj\Debug\fenetrePrincipale.csproj.CopyComplete
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MaterialDesignColors.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MaterialDesignThemes.Wpf.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MaterialDesignColors.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MaterialDesignThemes.Wpf.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\bin\Debug\MaterialDesignThemes.Wpf.xml
+D:\C#projets\ARNAUD_ZEEVAERT_2226\fenetrePrincipale\obj\Debug\App.baml

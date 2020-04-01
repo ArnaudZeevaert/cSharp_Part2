@@ -1,0 +1,6 @@
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\bin\Debug\getNewId.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\bin\Debug\getNewId.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\obj\Debug\getNewId.csprojAssemblyReference.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\obj\Debug\getNewId.csproj.CoreCompileInputs.cache
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\obj\Debug\getNewId.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\getNewId\obj\Debug\getNewId.pdb
