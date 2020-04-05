@@ -125,7 +125,7 @@ namespace MyCartographyObj
 
         public static MyPersonalMapData LoadFile(string cheminDacces)
         {
-            MyPersonalMapData ret_val = null;
+            MyPersonalMapData ret_val = new MyPersonalMapData(); ;
             try
             {
                 if (cheminDacces.Contains(".az"))
@@ -133,12 +133,11 @@ namespace MyCartographyObj
                     if (File.Exists(cheminDacces))
                     {
                         BinaryFormatter binFormat = new BinaryFormatter();
-                        ret_val = new MyPersonalMapData();
                         try
                         {
                             Stream fStream = new FileStream(cheminDacces, FileMode.Open, FileAccess.Read);
                             if (fStream == null)
-                                return null;
+                                throw new LoadSaveException("LoadFile fStream == null");
                             ret_val.Prenom = (string)binFormat.Deserialize(fStream);
                             ret_val.Nom = (string)binFormat.Deserialize(fStream);
                             ret_val.Email = (string)binFormat.Deserialize(fStream);
@@ -148,22 +147,18 @@ namespace MyCartographyObj
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("LoadFile : Erreur : {0}", e.Message);
-                            return null;
+                            throw new LoadSaveException("LoadFile (try/catch de fStream) : Erreur : " + e.Message);                            
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("DEBUG : LoadFile : le répertoire {0} n existe pas !!! : fin de la fct...", cheminDacces);
-                    }
+                    else                    
+                        throw new LoadSaveException("LoadFile : le répertoire : " + cheminDacces + " n existe pas !!!");                                            
                 }
                 else
-                    Console.WriteLine("DEBUG : LoadFile : nom de fichier invlaide !!! --> {0}", cheminDacces);
+                    throw new LoadSaveException("LoadFile : nom de fichier invlaide !!! --> " + cheminDacces);                    
             }
             catch (Exception e)
             {
-                Console.WriteLine("LoadFile : Erreur : {0}", e.Message);
-                return null;
+                throw new LoadSaveException("LoadFile : Erreur : " + e.Message);                
             }
             return ret_val;
         }
@@ -186,20 +181,24 @@ namespace MyCartographyObj
                         {
                             if (File.Exists(listeFicher[i]))
                             {
-                                Console.WriteLine("path = " + listeFicher[i]);
                                 MyPersonalMapData personneTMP = new MyPersonalMapData();
-                                using (BinaryReader readFile = new BinaryReader(File.Open(listeFicher[i], FileMode.Open)))
+                                BinaryFormatter binFormat = new BinaryFormatter();
+                                try
                                 {
-                                    //lecture du nom...
-                                    personneTMP.Nom = readFile.ReadString();
+                                    Stream fStream = new FileStream(listeFicher[i], FileMode.Open, FileAccess.Read);
+                                    if (fStream == null)
+                                        throw new LoadSaveException("LoadPersonne fStream == null");
+                                    personneTMP.Prenom = (string)binFormat.Deserialize(fStream);
+                                    personneTMP.Nom = (string)binFormat.Deserialize(fStream);
+                                    personneTMP.Email = (string)binFormat.Deserialize(fStream);
+                                    personneTMP.Emplacement = listeFicher[i];
+                                    personneTMP.SETObservableCollection((ObservableCollection<ICartoObj>)binFormat.Deserialize(fStream));
+                                    fStream.Close();
 
-                                    //lecture du prénom...
-                                    personneTMP.Prenom = readFile.ReadString();
-
-                                    //lecture du Email...
-                                    personneTMP.Email = readFile.ReadString();
-
-                                    personneTMP.Emplacement = listeFicher[i];                                        
+                                    //Console.WriteLine("DEBUG recherche de personne :");
+                                    //Console.WriteLine("path = " + listeFicher[i]);
+                                    //Console.WriteLine("personneTMP = \n" + personneTMP.ToString());
+                                    //Console.WriteLine("personneRecherchee = \n" + personneRecherchee.ToString());
 
                                     if (personneTMP.Nom == personneRecherchee.Nom && personneTMP.Prenom == personneRecherchee.Prenom && personneTMP.Email == personneRecherchee.Email)
                                     {
@@ -207,50 +206,49 @@ namespace MyCartographyObj
                                         i = listeFicher.Length;
                                     }
                                 }
+                                catch (Exception e)
+                                {
+                                    throw new LoadSaveException("LoadPersonne (try/catch de fStream) : Erreur : " + e.Message);
+                                }                                
                             }
                         }
                     }
                     else
-                    {
-                        Console.WriteLine("DEBUG : LoadObservableCollection : le répertoire {0} est vide !!!", emplacement);
-                    }
+                        throw new LoadSaveException("LoadObservableCollection : le répertoire" + emplacement + "est vide !!!");                                        
                 }
                 else
-                {
-                    Console.WriteLine("DEBUG : LoadObservableCollection : le répertoire {0} n existe pas !!! : fin de la fct...", emplacement);
-                }                
+                    throw new LoadSaveException("LoadObservableCollection : le répertoire" + emplacement + "n existe pas !!!");                                               
             }
             catch(Exception e)
             {
-                Console.WriteLine("LoadObservableCollection : Erreur : {0}", e.Message);
-                return null;
+                throw new LoadSaveException("LoadPersonne : Erreur : " + e.Message);                
             }
+
+            if(ret_val == null) throw new LoadSaveException("LoadPersonne : ret_val == null : personneRecherche pas trouvee :( ");
             return ret_val;
         }
 
         //INPUT :   un objet MyPersonalMapData a suauvegarder, l'emplacement de la sauvegarde (chemin d'accès avec nom de fichier)
         //PROCESS : sauvegarde MyPersonalMapData passé en paramètre à l'emplacement spécifie
         //          si path = null --> on sauvegarde uniquement à l'emplacement par défaut
-        //          si path est différent de l'emplacement par défaut, on sauvagarde à l'emplacement spécifié + l'emplacement par défaut
-        //OUTPUT :  null en cas d'erreur, en cas de succès : return de MyPersonnalMapData passé en paramètre avec son emplacement "path"
+        //          si path est différent de l'emplacement par défaut, on sauvagarde à l'emplacement spécifié + l'emplacement par défaut       
         public static MyPersonalMapData SavePersonne(MyPersonalMapData personneAsauvegardee, string path = null)
         {            
             MyPersonalMapData ret_val = null;
-            string nomFichier, directoryPath, emplacementSauvegrade = @"../../../sauvegarde/";
+            string nomFichier, directoryPath, emplacementSauvegrade = @"../../../sauvegarde/", emplacementVersionPrecedente = @"../../../sauvegarde/versionsPrecedentes/";
 
-            nomFichier = personneAsauvegardee.Nom + personneAsauvegardee.Prenom + IdFichier.GetAnNewId().ToString() + ".az";
+            nomFichier = personneAsauvegardee.Nom + personneAsauvegardee.Prenom + ".az";
             if (path != null)
             {
                 try
                 {
                     //nomFichier = Path.GetFileName(path);
                     directoryPath = Path.GetDirectoryName(path);
-                    path = directoryPath + nomFichier;
+                    path = Path.Combine(directoryPath, nomFichier);                    
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("EXCEPTION : SavePersonne (nomDeFichier/directoryPath) : " + e.Message);
-                    return null;
+                    throw new LoadSaveException("SavePersonne (nomDeFichier/directoryPath) : " + e.Message);                                        
                 }
             }
             else
@@ -258,9 +256,42 @@ namespace MyCartographyObj
                 directoryPath = emplacementSauvegrade;
                 path = emplacementSauvegrade + nomFichier;
             }
+
+            emplacementSauvegrade += nomFichier;            
+            Console.WriteLine("DEBUG : nom du fichier : {0} --- path : {1} --- emplacementSauvegarde : {2}", nomFichier, path, emplacementSauvegrade);
+
+            try
+            {
+                if (File.Exists(path))
+                {
+                    try
+                    {
+                        deplacementFichier(path, emplacementVersionPrecedente);
+                    }
+                    catch(LoadSaveException deplacementFichierMessage)
+                    {
+                        throw new LoadSaveException(deplacementFichierMessage.Message);
+                    }
+                }
+                if (File.Exists(emplacementSauvegrade))
+                {
+                    try
+                    {
+                        deplacementFichier(emplacementSauvegrade, emplacementVersionPrecedente);
+                    }
+                    catch (LoadSaveException deplacementFichierMessage)
+                    {
+                        throw new LoadSaveException(deplacementFichierMessage.Message);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                throw new LoadSaveException("un fichier au nom de cette personne existe déja, la suppression de l'ancien fichier à échouée:\n" + e.Message);
+            }
             
 
-            Console.WriteLine("DEBUG : nom du fichier : {0} --- directoryPath : {1} --- emplacementSauvegarde : {2}", nomFichier, directoryPath, emplacementSauvegrade);
+            
             //if (nomDeFichierIncluDansL_Emplacement) nomFichier = emplacement;
             //else nomFichier = emplacement + @"\" + personneAsauvegardee.Prenom + personneAsauvegardee.Nom + ".az";      
             
@@ -273,29 +304,42 @@ namespace MyCartographyObj
                 binFormat.Serialize(fStream, personneAsauvegardee.Email);
                 binFormat.Serialize(fStream, personneAsauvegardee.ObservableCollection);
                 fStream.Close();
-
-                //copie du fichier dans : @"D:\C#projets\ARNAUD_ZEEVAERT_2226\sauvegarde" si ce n'est déja pas l'emplacement actuel
-                if(!path.Contains(emplacementSauvegrade))
+                                                                      
+                if (!File.Exists(emplacementSauvegrade))
                 {
                     Console.WriteLine("DEBUG : copie du fichier dans : D:/C#projets/ARNAUD_ZEEVAERT_2226/sauvegarde si ce n'est déja pas l'emplacement actuel");
-                    emplacementSauvegrade += nomFichier;
-                    Console.WriteLine("DEBUG: emplacement sauvegarde = " + emplacementSauvegrade);
                     File.Copy(path, emplacementSauvegrade);
                 }
-
+                                                        
                 //sauvegarde de l'emplacement dans l'objet MyPersonnalMapData
                 ret_val = personneAsauvegardee;
                 ret_val.Emplacement = path;
             }
             catch (Exception e)
             {
-                Console.WriteLine("SavePersonne : Erreur : {0}", e.Message);
-                return null;
-            }
-            
-            Console.WriteLine("Debug : SavePersonne : save ok ? : {0}", ret_val);
+                throw new LoadSaveException("SavePersonne (fStream) : Erreur : " + e.Message);
+            }                        
+
+            if (ret_val == null) throw new LoadSaveException("SavePersonne : ret_val == null : une erreur est survenue :( ");
 
             return ret_val;
+        }
+
+        public static void deplacementFichier(string pathActuel, string newDirectory)
+        {
+            string newfileName = Path.GetFileNameWithoutExtension(pathActuel);
+            newfileName += IdFichier.GetAnNewId().ToString() + ".az";
+
+            try
+            {
+                string destFile = Path.Combine(newDirectory, newfileName);
+                Console.WriteLine("DEBUG : deplacementFichier : destFile = " + destFile);
+                File.Move(pathActuel, destFile);
+            }
+            catch (Exception e)
+            {
+                throw new LoadSaveException("(deplacementFichier) ERREUR : " + e.Message);
+            }
         }
         public override string ToString()
         {

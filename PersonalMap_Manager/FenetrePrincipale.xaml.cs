@@ -114,12 +114,18 @@ namespace PersonalMap_Manager
 
             //openFile.di
 
-            MyPersonalMapData personneTMP;
-            if ((personneTMP = MyPersonalMapData.LoadFile(openFile.FileName)) == null)
+            MyPersonalMapData personneTMP = null;
+            try
             {
-                MessageBox.Show("ERREUR OUVERTURE", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                personneTMP = MyPersonalMapData.LoadFile(openFile.FileName);
             }
-            else
+            catch (LoadSaveException messageErreurLoadFile)
+            {
+                MessageBox.Show(messageErreurLoadFile.Message, "ERREUR OUVERTURE", MessageBoxButton.OK, MessageBoxImage.Error);
+                personneTMP = null;
+            }
+            
+            if (personneTMP != null)             
             {
                 MessageBox.Show("OUVERTURE REUSSIE", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 PersonneConnectee = personneTMP;
@@ -133,18 +139,23 @@ namespace PersonalMap_Manager
             saveFile.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             saveFile.Filter = "MyCartographyObj files(*.az) | *.az";
             saveFile.ShowDialog();
-            MyPersonalMapData personneTMP;
+            MyPersonalMapData personneTMP = null;
 
-            if ((personneTMP = MyPersonalMapData.SavePersonne(PersonneConnectee, saveFile.FileName)) != null)
+            try
+            {
+                personneTMP = MyPersonalMapData.SavePersonne(PersonneConnectee, saveFile.FileName);
+            }
+            catch (LoadSaveException messageErreurSave)
+            {
+                MessageBox.Show(messageErreurSave.Message, "ERREUR SAUVEGARDE" , MessageBoxButton.OK, MessageBoxImage.Error);
+                personneTMP = null;
+            }
+            if (personneTMP != null)               
             {
                 PersonneConnectee = personneTMP;
                 TextDebug.Content = PersonneConnectee.ToString();
                 MessageBox.Show("SAUVEGARDE REUSSIE", "", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                MessageBox.Show("ERREUR SAUVEGARDE", "", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            }            
         }
 
         private void MenuFileExit_Click(object sender, RoutedEventArgs e)
@@ -241,11 +252,22 @@ namespace PersonalMap_Manager
         #region METHODES
         private void QuitterSauvegarde()
         {
-            MyPersonalMapData personneTMP;
+            MyPersonalMapData personneTMP = null;
             bool modif = true;
             if(PersonneConnectee.Emplacement != null)
             {
-                if((personneTMP = MyPersonalMapData.LoadFile(PersonneConnectee.Emplacement)) != null)
+                try
+                {
+                    personneTMP = MyPersonalMapData.LoadFile(PersonneConnectee.Emplacement);
+                }
+                catch (LoadSaveException messageErreurLoadFile)
+                {
+                    //MessageBox.Show("ERREUR OUVERTURE", messageErreurLoadFile.Message, MessageBoxButton.OK, MessageBoxImage.Error);
+                    Console.WriteLine("(QuitterSauvegarde) ERREUR OUVERTURE : " + messageErreurLoadFile.Message);
+                    personneTMP = null;
+                }
+
+                if (personneTMP != null)                    
                 {
                     if (personneTMP.ObservableCollection.Equals(PersonneConnectee.ObservableCollection))
                         modif = false;
@@ -265,16 +287,21 @@ namespace PersonalMap_Manager
                 switch (resultNewClient)
                 {
                     case MessageBoxResult.Yes:
-                        if ((personneTMP = MyPersonalMapData.SavePersonne(PersonneConnectee, PersonneConnectee.Emplacement)) != null)
+                        try
+                        {
+                            personneTMP = MyPersonalMapData.SavePersonne(PersonneConnectee, PersonneConnectee.Emplacement);
+                        }
+                        catch (LoadSaveException messageErreurSave)
+                        {
+                            MessageBox.Show(messageErreurSave.Message, "ERREUR SAUVEGARDE", MessageBoxButton.OK, MessageBoxImage.Error);
+                            personneTMP = null;
+                        }
+                        if (personneTMP != null)                            
                         {
                             PersonneConnectee = personneTMP;
                             MessageBox.Show("SAUVEGARDE REUSSIE", "", MessageBoxButton.OK, MessageBoxImage.Information);
                             this.Close();
-                        }
-                        else
-                        {
-                            MessageBox.Show("ERREUR SAUVEGARDE", "", MessageBoxButton.OK, MessageBoxImage.Error);                            
-                        }
+                        }                        
                         break;
                         /*case MessageBoxResult.No:
 

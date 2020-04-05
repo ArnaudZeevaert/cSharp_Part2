@@ -104,15 +104,15 @@ namespace PersonalMap_Manager
                 messageErreur += " Prenom invalide";
             }
 
-            if (!validerEmail(EMAIL_TextBox.Text))
-            {
-                erreurEncodage = true;
-                messageErreur += " Email invalide";
-            }
+            //if (!validerEmail(EMAIL_TextBox.Text))
+            //{
+            //    erreurEncodage = true;
+            //    messageErreur += " Email invalide";
+            //}
 
             if (erreurEncodage)
             {
-                MessageBox.Show(messageErreur, "ERREUR ENCODAGE", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("ERREUR ENCODAGE", messageErreur, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
@@ -120,26 +120,39 @@ namespace PersonalMap_Manager
                 Personne.Prenom = PRENOM_TextBox.Text;
                 Personne.Email = EMAIL_TextBox.Text;
 
-                MyPersonalMapData personneTMP;
-                if ((personneTMP = MyPersonalMapData.LoadPersonne(Personne)) == null)
+                MyPersonalMapData personneTMP = null;
+                try
                 {
-                    MessageBoxResult resultNewClient = MessageBox.Show("Vous n'existez pas dans la base de donnée...\nVoulez-vous vous inscrire ?", "", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    switch (resultNewClient)
-                    {
-                        case MessageBoxResult.Yes:
-                            if ((personneTMP = MyPersonalMapData.SavePersonne(Personne)) != null)
-                            {
-                                Personne = personneTMP;
-                                FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(Personne);
-                                fenetrePrincipale.Show();
-                                Close();                                
-                            }
-                            else
-                                MessageBox.Show("ERREUR SAUVEGARDE", "", MessageBoxButton.OK, MessageBoxImage.Error);
-                            break;
-                    }
+                    personneTMP = MyPersonalMapData.LoadPersonne(Personne);
                 }
-                else
+                catch (LoadSaveException messageErreurLoadPersonne)
+                {
+                    Console.WriteLine("ERREUR LoadPersonne : " + messageErreurLoadPersonne.Message);
+                    
+                    MessageBoxResult resultNewClient = MessageBox.Show("Vous n'existez pas dans la base de donnée...\nVoulez-vous vous inscrire ?", "", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (resultNewClient == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            personneTMP = MyPersonalMapData.SavePersonne(Personne);
+                        }
+                        catch (LoadSaveException messageErreurSave)
+                        {
+                            MessageBox.Show(messageErreurSave.Message, "ERREUR SAUVEGARDE", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        if (personneTMP != null)
+                        {
+                            Personne = personneTMP;
+                            FenetrePrincipale fenetrePrincipale = new FenetrePrincipale(Personne);
+                            fenetrePrincipale.Show();
+                            Close();
+                        }
+                    }
+
+                    personneTMP = null;                    
+                }
+                
+                if (personneTMP != null)                
                 {
                     Personne = personneTMP;
                     string message = "RE Bonjour, " + Personne.Nom + " " + Personne.Prenom + ":)";

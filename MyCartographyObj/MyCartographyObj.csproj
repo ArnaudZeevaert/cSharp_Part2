@@ -47,6 +47,7 @@
     <Compile Include="ICartoObj.cs" />
     <Compile Include="IisPointClose.cs" />
     <Compile Include="IPointy.cs" />
+    <Compile Include="LoadSaveException.cs" />
     <Compile Include="MyPersonalMapData.cs" />
     <Compile Include="MyPolylineBoundingBoxComparer.cs" />
     <Compile Include="NbrCoordonneesComparer.cs" />

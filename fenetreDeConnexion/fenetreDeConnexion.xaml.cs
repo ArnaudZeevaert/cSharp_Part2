@@ -160,3 +160,20 @@ namespace fenetreDeConnexion
         }
     }
 }
+
+
+public void deplacementFichier(string pathActuel, string newDirectory)
+{
+    string newfileName = Path.GetFileNameWithoutExtension(pathActuel);
+    newfileName += IdFichier.GetAnNewId().ToString() + ".az";
+    
+    try
+    {
+        string destFile = Path.Combine(newDirectory, newfileName);
+        File.Move(pathActuel, destFile)
+    }
+    catch (Exception e)
+    {
+        throw new LoadSaveException("(deplacementFichier) ERREUR : " + e.Message);                                                
+    }
+}
