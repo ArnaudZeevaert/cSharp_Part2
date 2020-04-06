@@ -32,6 +32,7 @@ namespace MyCartographyObj
                 if(_emplacement != value)
                 {
                     _emplacement = value;
+                    OnPropertyChanged();
                 }
             }
             get { return _emplacement; }
@@ -90,7 +91,7 @@ namespace MyCartographyObj
                     OnPropertyChanged();
                 }             
             }                             
-        }
+        }        
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

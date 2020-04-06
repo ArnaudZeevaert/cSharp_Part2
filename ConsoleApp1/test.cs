@@ -333,13 +333,14 @@ namespace ConsoleApp1
             Console.WriteLine("MyPersonalMapData : new MyPersonalMapData(zeevaert, arnaud, az@gmail.com, listeDeCartoObj);");
             Console.WriteLine(Test2myPersonalMapData.ToString());
 
-            MyPersonalMapData.SavePersonne(Test2myPersonalMapData);
+            
+
+            //newObservableCollectionCartoObj.ge
+
+
 
             string inutile;
 
-            Console.WriteLine("save csv POI :");
-            if (POI.saveCSVfile(Sraing)) Console.WriteLine("save ok");
-            else Console.WriteLine("save faild");
             
 
 

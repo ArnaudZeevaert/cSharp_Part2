@@ -2,6 +2,7 @@
 using MyCartographyObj;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,6 +18,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Polygon = MyCartographyObj.Polygon;
+using Polyline = MyCartographyObj.Polyline;
+
 namespace PersonalMap_Manager
 {
     /// <summary>
@@ -30,7 +34,7 @@ namespace PersonalMap_Manager
         private MyPersonalMapData _personneConnectee = new MyPersonalMapData();
         private string _dossierDeTravail;
         private string _couleurFondListBox;
-        private string _couleurTextListBox;
+        private string _couleurTextListBox;        
         #endregion
 
         #region PROPRIETES
@@ -78,6 +82,8 @@ namespace PersonalMap_Manager
         {           
             InitializeComponent();
             TextDebug.Content = PersonneConnectee.ToString();
+            UpadateListBox();
+            
 
             //SourceInitialized += (s, e) =>
             //{
@@ -93,7 +99,7 @@ namespace PersonalMap_Manager
         {
             PersonneConnectee = personne;            
             InitializeComponent();
-            TextDebug.Content = PersonneConnectee.ToString();
+            TextDebug.Content = PersonneConnectee.ToString();            
         }
         #endregion
 
@@ -130,6 +136,7 @@ namespace PersonalMap_Manager
                 MessageBox.Show("OUVERTURE REUSSIE", "", MessageBoxButton.OK, MessageBoxImage.Information);
                 PersonneConnectee = personneTMP;
                 TextDebug.Content = PersonneConnectee.ToString();
+                UpadateListBox();
             }
         }
 
@@ -250,6 +257,31 @@ namespace PersonalMap_Manager
         }
 
         #region METHODES
+        private void UpadateListBox()
+        {
+            ListBox.Items.Clear();
+            foreach (ICartoObj o in PersonneConnectee.ObservableCollection)
+            {
+                if (o is POI)
+                {
+                    POI p = o as POI;
+                    //ListBox.Items.Add("POI: " + p.Id + " / " + p.Description);                    
+                    ListBox.Items.Add(p);
+                }
+                if (o is Polyline)
+                {
+                    Polyline p = o as Polyline;
+                    //ListBox.Items.Add("Trajet: " + p.Id);
+                    ListBox.Items.Add(p);
+                }
+                if (o is Polygon)
+                {
+                    Polygon p = o as Polygon;
+                    //ListBox.Items.Add("Surface: " + p.Id);
+                    ListBox.Items.Add(p);
+                }
+            }
+        }
         private void QuitterSauvegarde()
         {
             MyPersonalMapData personneTMP = null;
@@ -312,5 +344,89 @@ namespace PersonalMap_Manager
                 this.Close();
         }
         #endregion
+
+        private void DeleteSelectItem_Click(object sender, RoutedEventArgs e)
+        {
+            bool suppressionOK = false;
+            ICartoObj o = (ICartoObj)ListBox.SelectedItem;
+            if(o == null)
+            {
+                suppressionOK = true;
+                MessageBox.Show("Aucun élément de la ListBox est sélectionné", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                if (o is POI)
+                {
+                    POI p = o as POI;
+                    foreach(ICartoObj oInCollection in PersonneConnectee.ObservableCollection)
+                    {
+                        if(oInCollection is POI)
+                        {
+                            POI poiInCollection = oInCollection as POI;
+                            if (poiInCollection.Id == p.Id)
+                            {
+                                if (PersonneConnectee.ObservableCollection.Remove(poiInCollection))
+                                {
+                                    MessageBox.Show("Suppression du POI OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    suppressionOK = true;
+                                }
+                                break;
+                            }
+                        }                        
+                    }
+                }
+                if (o is Polyline)
+                {
+                    Polyline p = o as Polyline;
+                    foreach (ICartoObj oInCollection in PersonneConnectee.ObservableCollection)
+                    {
+                        if (oInCollection is Polyline)
+                        {
+                            Polyline polylineInCollection = oInCollection as Polyline;
+                            if (polylineInCollection.Id == p.Id)
+                            {
+                                if (PersonneConnectee.ObservableCollection.Remove(polylineInCollection))
+                                {
+                                    MessageBox.Show("Suppression du polyline OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    suppressionOK = true;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                }
+                if (o is Polygon)
+                {
+                    Polygon p = o as Polygon;
+                    foreach (ICartoObj oInCollection in PersonneConnectee.ObservableCollection)
+                    {
+                        if (oInCollection is Polygon)
+                        {
+                            Polygon polygonInCollection = oInCollection as Polygon;
+                            if (polygonInCollection.Id == p.Id)
+                            {
+                                if (PersonneConnectee.ObservableCollection.Remove(polygonInCollection))
+                                {
+                                    MessageBox.Show("Suppression du polyline OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                                    suppressionOK = true;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                UpadateListBox();
+                TextDebug.Content = PersonneConnectee.ToString();
+
+            }
+
+            if(!suppressionOK)
+                MessageBox.Show("La suppresion à échouée", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
+
+    
 }
