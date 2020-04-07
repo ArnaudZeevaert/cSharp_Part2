@@ -16,6 +16,7 @@ namespace MyCartographyObj
         private string _couleur;
         private int _epaisseur;
         private int _nbPoints;
+        private string _nomTrajet;
         #endregion
 
         #region PROPRIETE
@@ -33,6 +34,11 @@ namespace MyCartographyObj
         {
             set { _epaisseur = value; }
             get { return _epaisseur; }
+        }
+        public string NomTrajet
+        {
+            set { _nomTrajet = value; }
+            get { return _nomTrajet; }
         }
 
         public int GetNbPoints()
@@ -56,29 +62,17 @@ namespace MyCartographyObj
         #region METHODE
         public override string ToString()
         {
-            int i = 0;
+            return string.Format("id({0})", Id) + " Nom trajet : " + NomTrajet;            
+        }
+        public override string Draw()
+        {
             string collectionEnUneLigne = "";
             foreach (CartoObj o in _collectionDeCoordonnees)
             {
-                collectionEnUneLigne += "\n\t(" + i.ToString() + ") " + o.ToString();                
-                i++;
+                collectionEnUneLigne += "\n\t" + o.Draw();
             }
             collectionEnUneLigne += "\n";
-            return base.ToString() + " Collection de coordonnees --> " + collectionEnUneLigne + " / Couleur : " + Couleur + string.Format(" / Epaisseur: {0}", Epaisseur);
-        }
-        public override void Draw()
-        {
-            Console.WriteLine(this.ToString());
-            if (_collectionDeCoordonnees == null) { Console.WriteLine("Pas de Coordonnees"); }
-            else
-            {
-                int i = 0;
-                foreach (Coordonnees c in _collectionDeCoordonnees)
-                {
-                    Console.WriteLine(string.Format("Coordonnees({0})", i) + string.Format(" (Lat/Long) ({0:0.000}/{1:0.000})", c.Latitude, c.Longitude));
-                    i++;
-                }
-            }
+            return this.ToString() + " / Couleur : " + Couleur + string.Format(" / Epaisseur: {0}", Epaisseur) + collectionEnUneLigne;
         }
         private void iDeCoordonneesDifferentes()
         {

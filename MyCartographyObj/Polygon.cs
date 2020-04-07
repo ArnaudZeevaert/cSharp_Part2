@@ -17,6 +17,7 @@ namespace MyCartographyObj
         private string _couleurDeContour;
         private double _opacite;
         private int _nbPoints;
+        private string _nomSurface;
         #endregion
 
         #region PROPRIETE
@@ -52,6 +53,12 @@ namespace MyCartographyObj
             get { return _opacite; }
         }
 
+        public string NomSurface
+        {
+            set { _nomSurface = value; }
+            get { return _nomSurface; }
+        }
+
         public int GetNbPoints()
         { return _nbPoints; }
         #endregion
@@ -80,21 +87,17 @@ namespace MyCartographyObj
         #region METHODES
         public override string ToString()
         {
-            return base.ToString() + " Collection de coordonnees --> voir Draw" + " / Couleur de remplissage : " + CouleurDeRemplissage + " / Couleur de Contour : " + CouleurDeContour + string.Format(" / Opacite: {0}", Opacite);
+            return string.Format("id({0})", Id) + " Nom surface : " + NomSurface;
         }
-        public override void Draw()
-        {
-            Console.WriteLine(this.ToString());
-            if (_collectionDeCoordonnees == null) { Console.WriteLine("Pas de Coordonnees"); }
-            else
+        public override string Draw()
+        {            
+            string collectionEnUneLigne = "";
+            foreach (CartoObj o in _collectionDeCoordonnees)
             {
-                int i = 0;
-                foreach (Coordonnees c in _collectionDeCoordonnees)
-                {
-                    Console.WriteLine(string.Format("Coordonnees({0})", i) + string.Format(" (Lat/Long) ({0:0.000}/{1:0.000})", c.Latitude, c.Longitude));
-                    i++;
-                }
+                collectionEnUneLigne += "\n\t" + o.Draw();                
             }
+            collectionEnUneLigne += "\n";
+            return this.ToString() + " / Couleur de remplissage : " + CouleurDeRemplissage + " / Couleur de Contour : " + CouleurDeContour + string.Format(" / Opacite: {0}", Opacite) + collectionEnUneLigne;
         }
         private void CompteurDeCoordonneesDifferentes()
         {

@@ -30,9 +30,9 @@ namespace MyCartographyObj
         #endregion
 
         #region METHODES
-        public virtual void Draw()
+        public virtual string Draw()
         {
-            Console.WriteLine(this.ToString());
+            return this.ToString();
         }
         public override string ToString()
         {

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="CartoObj.cs" />
     <Compile Include="Coordonnees.cs" />
+    <Compile Include="CSVexception.cs" />
     <Compile Include="ICartoObj.cs" />
     <Compile Include="IisPointClose.cs" />
     <Compile Include="IPointy.cs" />

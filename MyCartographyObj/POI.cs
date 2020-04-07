@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathUtil;
+using getNewId;
+using System.IO;
 
 namespace MyCartographyObj
 {
@@ -23,7 +25,7 @@ namespace MyCartographyObj
         #endregion
 
         #region CONSTRUCTEURS
-        public POI() : this(50.610745, 5.510437, "IN.PR.E.S.")
+        public POI() : this(50.610745, 5.510437, "InPrEs")
         {
 
         }
@@ -35,16 +37,16 @@ namespace MyCartographyObj
         #endregion
 
         #region METHODES
-        public override void Draw()
+        public override string Draw()
         {
-            Console.WriteLine(this.ToString());
+            return this.ToString();
         }
         public override string ToString()
         {
-            return base.ToString() + " Description : " + Description;
+            return string.Format("id({0})", Id) + " Description : " + Description;
         }
 
-        public static POI readCSVfile(string cheminDacces = @"../../../PersonalMap_Manager\Ressources\fichiersCSV\HEPL Seraing POI.csv")
+        public static POI readCSVfile(string cheminDacces = @"../../../PersonalMap_Manager/Ressources/fichiersCSV/HEPL Seraing POI.csv")
         {
             POI ret_val = null;
             string [] donnees;
@@ -52,38 +54,60 @@ namespace MyCartographyObj
             try
             {
                 string fichier = System.IO.File.ReadAllText(cheminDacces);
-                donnees = fichier.Split(';');
-                
-                if(donnees.Length==3)
-                    ret_val = new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), donnees[2]);                                
+                donnees = fichier.Split(';');                               
+
+                if (donnees.Length == 3)
+                {
+                    Console.WriteLine("DEBUG : nom du poi contient un retour de ligne : -" + donnees[2] + "-");
+
+                    string nomSansRetourAlaLigne = "";
+                    foreach (char c in donnees[2])
+                    {
+                        if (c != '\n' && c != '\r' && c != '\t')
+                        {
+                            nomSansRetourAlaLigne += c.ToString();
+                        }
+                        else
+                            break;
+                    }
+
+                    //donnees[2] = donnees[2].Replace("\n", string.Empty);
+                    donnees[2] = nomSansRetourAlaLigne;
+                    Console.WriteLine("DEBUG : apres remove : -" + donnees[2] + "-");
+                    ret_val = new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), donnees[2]);
+                }
+                else
+                {
+                    ret_val = new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), "");
+                }
+
             }
             catch(Exception e)
             {
-                Console.WriteLine("error READallTEXT POI : " + e.Message);
-                return null;
+                throw new CSVexception("error READallTEXT POI : " + e.Message);
             }
 
             return ret_val;
         }
 
-        public static bool saveCSVfile(POI pOI, string cheminDacces = @"../../../PersonalMap_Manager\Ressources\fichiersCSV\")
+        public static void saveCSVfile(POI pOI, string cheminDacces)
         {
-            bool ret_val = false;
-            cheminDacces += pOI.Description + ".csv";
+            string nomFichier = pOI.Description + IdFichier.GetAnNewId().ToString() + ".csv";            
+
             try
             {
-                using(System.IO.StreamWriter file = new System.IO.StreamWriter(cheminDacces, true))
+                cheminDacces = Path.GetDirectoryName(cheminDacces);
+                cheminDacces = Path.Combine(cheminDacces, nomFichier);
+
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(cheminDacces, true))
                 {
-                    file.WriteLine(Convert.ToString(pOI.Latitude) + ";" + Convert.ToString(pOI.Longitude) + ";" + pOI.Description);
-                    ret_val = true;
+                    file.WriteLine(Convert.ToString(pOI.Latitude) + ";" + Convert.ToString(pOI.Longitude) + ";" + pOI.Description);                    
                 }
             }
             catch(Exception e)
             {
-                Console.WriteLine("error saveCSVfile POI : " + e.Message);
-                return false;
-            }
-            return ret_val;
+                throw new CSVexception("error saveCSVfile POI : " + e.Message);                                
+            }            
         }
         #endregion
     }
