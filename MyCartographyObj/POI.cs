@@ -7,10 +7,13 @@ using MathUtil;
 using getNewId;
 using System.IO;
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace MyCartographyObj
 {
     [Serializable]
-    public class POI : Coordonnees, IisPointClose, ICartoObj
+    public class POI : Coordonnees, IisPointClose, ICartoObj, INotifyPropertyChanged
     {
         #region VARIABLES MEMBRES   
         private string _description;
@@ -19,7 +22,14 @@ namespace MyCartographyObj
         #region PROPRIETES
         public string Description
         {
-            set { _description = value; }
+            set 
+            {
+                if (value != _description)
+                {
+                    _description = value;
+                    OnPropertyChanged();
+                }
+            }
             get { return _description; }
         }
         #endregion
@@ -39,7 +49,7 @@ namespace MyCartographyObj
         #region METHODES
         public override string Draw()
         {
-            return this.ToString();
+            return this.ToString() + string.Format(" (Lat/Long) ({0:0.000}/{1:0.000})", Latitude, Longitude);
         }
         public override string ToString()
         {

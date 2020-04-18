@@ -12,6 +12,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="48"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -56,6 +58,15 @@
                     <StackPanel Height="20"></StackPanel>
                 </StackPanel>
             </Border>
+
+            
+            <Label Grid.Row="2" Content="Informations Personne Connectée :" BorderBrush="Black" BorderThickness="2"/>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="auto">
+                <TextBlock x:Name="TextBlockInfoPersonneConnectee"                     
+                       Width="400" Height="auto"/>
+            </ScrollViewer>
+
         </Grid>
     </Border>
 </Window>

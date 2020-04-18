@@ -1,90 +1,113 @@
-﻿<!--<Window x:Class="PersonalMap_Manager.FenetreOption"
+﻿<Window x:Class="PersonalMap_Manager.FenetreOption"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonalMap_Manager"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
         mc:Ignorable="d"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        WindowStartupLocation="CenterScreen"
-        Title="FenetreOption" Height="450" Width="450" WindowStyle="None" ResizeMode="NoResize">
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="323*"/>
-            <RowDefinition Height="29*"/>
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0">
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF2281D1"/>
-                    <GradientStop Color="#FF34268A" Offset="1"/>
-                    <GradientStop Color="#FF33288B" Offset="0.546"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-        </Grid>
-
-        <Grid Grid.Row="1" Background="White">
-            
-                <Button x:Name="OK_Button" Width="75" Content="OK" Margin="10,0,0,0" HorizontalAlignment="Left" />
-                <Button x:Name="Appliquer_Button" Width="100" Content="Appliquer" />
-                <Button x:Name="Cancel_Button" Width="75" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,0" />
-            
-        </Grid>
-
-    </Grid>
-</Window>-->
-    
-<Window x:Class="PersonalMap_Manager.FenetreOption"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PersonalMap_Manager"
-        mc:Ignorable="d"
-        Title="FenetreOption" SizeToContent="WidthAndHeight" SnapsToDevicePixels="True" MinWidth="400"
-        AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" BorderBrush="Black">
+        Title="FenetreOption" 
+        SizeToContent="WidthAndHeight" SnapsToDevicePixels="True"
+        AllowsTransparency="True" 
+        WindowStyle="None" ResizeMode="NoResize" 
+        WindowStartupLocation="CenterScreen" 
+        BorderBrush="Black">
     <Border>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="48"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="48"></RowDefinition>
             </Grid.RowDefinitions>
-            
-            
+
             <DockPanel Grid.Row="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Image Source="./Ressources/settingIcon.png"></Image>
-                    <Label Content="Options"></Label>
+                    <Label Content="Options" FontFamily="Consolas" FontSize="19"></Label>
                 </StackPanel>
             </DockPanel>
             <Thumb Grid.Row="0" Opacity="0" Background="Transparent" Foreground="{x:Null}" DragDelta="MainHeaderThumb_OnDragDelta"/>
             <DockPanel Grid.Row="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                    <Button ToolTip="Close" Width="32" Height="32" Click="ButtonClose_OnClick">
+                    <Button Width="32" Height="32" Click="ButtonClose_OnClick"
+                            ToolTip="annuler les changements et fermer la fenêtre">
                         <Button.Background>
                             <ImageBrush ImageSource="./Ressources/croix.png"/>
                         </Button.Background>
-
                     </Button>
                 </StackPanel>
             </DockPanel>
 
-            <Border Grid.Row="1">
-                
-            </Border>
+            <UniformGrid Grid.Row="1" Rows="1" Columns="2">
+                <StackPanel Grid.Column="0">
+                    <Label Content="Couleur de fond :"  Height="30" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Label Content="Couleur du text :"  Height="30" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Label Content="Dossier de travail :" Height="30" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Button x:Name="ModifierDossierDeTravail" Click="ModifierDossierDeTravail_Click" Height="50" Width="50" ToolTip="Modifier le dossier de travail">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/edit.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
 
-            <DockPanel Grid.Row="2" HorizontalAlignment="Left" Height="48">
-                <Button x:Name="OK_Button" Width="75" Content="OK" Margin="10,0,0,0" HorizontalAlignment="Left" />
-            </DockPanel>
-            <DockPanel Grid.Row="2" HorizontalAlignment="Center" Height="48">
-                <Button x:Name="Appliquer_Button" Width="100" Content="Appliquer" />
-            </DockPanel>
-            <DockPanel Grid.Row="2" HorizontalAlignment="Right" Height="48">
-                <Button x:Name="Cancel_Button" Width="75" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,10,0" />
-            </DockPanel>
+                <StackPanel Grid.Column="1">
+                    <ComboBox x:Name="couleurDeFondCombo" 
+                                  SelectedItem="{Binding CouleurFondSelectionne}" 
+                                  Height="30"
+                                  VerticalContentAlignment="Center" 
+                                  FontFamily="Unispace" FontSize="18" 
+                                  Background="Transparent" 
+                                  Foreground="Gray" BorderBrush="White" BorderThickness="1"/>
+                    <ComboBox x:Name="couleurDeTextCombo" 
+                                  SelectedItem="{Binding CouleurTextSelectionne}" 
+                                  Height="30"                                  
+                                  VerticalContentAlignment="Center" 
+                                  FontFamily="Unispace" FontSize="18" 
+                                  Background="Transparent" 
+                                  Foreground="Gray" BorderBrush="White" BorderThickness="1"/>
+                    <Label x:Name="dossierDeTravailLabel" Height="30" Content="" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+
+                </StackPanel>
+            </UniformGrid>
+
+            <UniformGrid Grid.Row="2" Rows="1">
+                <Button x:Name="ButtonAnnuler"
+                        Grid.Column="0"
+                        ToolTip="annuler les changements sans fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" 
+                        Click="ButtonAnnuler_Click" 
+                        Content="Annuler"                         
+                        Background="Red" 
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"/>
+                <Button x:Name="ButtonAppliquer" 
+                        Grid.Column="1"
+                        ToolTip="appliquer les changements sans fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" 
+                        Click="ButtonAppliquer_Click" 
+                        Content="Appliquer"                         
+                        Background="Green" 
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace"
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"/>
+                <Button x:Name="ButtunOk" 
+                        Grid.Column="2"
+                        ToolTip="appliquer les changements et fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Click="ButtunOk_Click" 
+                        Content="OK"                          
+                        Background="Transparent"
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" Foreground="Black"/>
+            </UniformGrid>
         </Grid>
     </Border>
 </Window>

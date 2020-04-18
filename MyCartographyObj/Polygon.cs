@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using MathUtil;
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace MyCartographyObj
 {
     [Serializable]
-    public class Polygon : CartoObj, IPointy, IisPointClose, ICartoObj
+    public class Polygon : CartoObj, IPointy, IisPointClose, ICartoObj, INotifyPropertyChanged
     {
         #region VARIABLE MEMBRES
         public List<Coordonnees> _collectionDeCoordonnees;
@@ -23,22 +26,38 @@ namespace MyCartographyObj
         #region PROPRIETE
         public Color CouleurDeRemplissage
         {
-            set { _couleurDeRemplissage = value.ToString(); }
+            set 
+            { 
+                _couleurDeRemplissage = value.ToString();
+                OnPropertyChanged();
+            }
             get { return (Color)ColorConverter.ConvertFromString(_couleurDeRemplissage); }
         }
         public string CouleurDeRemplissageString
         {
-            set { _couleurDeRemplissage = value; }
+            set 
+            { 
+                _couleurDeRemplissage = value;
+                OnPropertyChanged();
+            }
             get { return _couleurDeRemplissage; }
         }
         public Color CouleurDeContour
         {
-            set { _couleurDeContour = value.ToString(); }
+            set 
+            { 
+                _couleurDeContour = value.ToString();
+                OnPropertyChanged();
+            }
             get { return (Color)ColorConverter.ConvertFromString(_couleurDeContour); }
         }
         public string CouleurDeContourString
         {
-            set { _couleurDeContour = value; }
+            set 
+            { 
+                _couleurDeContour = value;
+                OnPropertyChanged();
+            }
             get { return _couleurDeContour; }
         }
         public double Opacite
@@ -48,6 +67,7 @@ namespace MyCartographyObj
                 if (value >= 0 && value <= 1)
                 {
                     _opacite = value;
+                    OnPropertyChanged();
                 }
             }
             get { return _opacite; }
@@ -55,7 +75,11 @@ namespace MyCartographyObj
 
         public string NomSurface
         {
-            set { _nomSurface = value; }
+            set 
+            { 
+                _nomSurface = value;
+                OnPropertyChanged();
+            }
             get { return _nomSurface; }
         }
 

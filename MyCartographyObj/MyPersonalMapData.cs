@@ -84,11 +84,12 @@ namespace MyCartographyObj
                 if (newObservableCollection == null)
                 {
                     _observableCollection = new ObservableCollection<ICartoObj>();
+                    OnPropertyChanged();
                 }
                 else
-                {
+                {                    
                     _observableCollection = newObservableCollection;
-                    OnPropertyChanged();
+                    OnPropertyChanged();                    
                 }
             }
         }
@@ -391,10 +392,10 @@ namespace MyCartographyObj
                         Console.WriteLine("DEBUG : apres remove : -" + donnees[2] + "-");
 
 
-                        trajet._collectionDeCoordonnees.Add(new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), donnees[2]));
+                        trajet.CollectionDeCoordonnes.Add(new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), donnees[2]));
                     }
                     else
-                        trajet._collectionDeCoordonnees.Add(new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), ""));
+                        trajet.CollectionDeCoordonnes.Add(new POI(Convert.ToDouble(donnees[0]), Convert.ToDouble(donnees[1]), ""));
                 }
                 trajet.NomTrajet = Path.GetFileNameWithoutExtension(cheminDacces);
                 personne.ObservableCollection.Add(trajet);
@@ -416,7 +417,7 @@ namespace MyCartographyObj
                 Console.WriteLine("DEBUG (2) : chemin d acces = " + cheminDacces);
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(cheminDacces, true))
                 {
-                    foreach (POI p in trajet._collectionDeCoordonnees)
+                    foreach (POI p in trajet.CollectionDeCoordonnes)
                     {
                         if (p.Description == "")
                         {

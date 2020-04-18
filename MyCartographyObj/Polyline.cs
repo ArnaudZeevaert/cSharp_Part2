@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using MathUtil;
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace MyCartographyObj
 {
     [Serializable]
-    public class Polyline : CartoObj, IPointy, IisPointClose, IComparable<Polyline>, IEquatable<Polyline>, ICartoObj
+    public class Polyline : CartoObj, IPointy, IisPointClose, IComparable<Polyline>, IEquatable<Polyline>, ICartoObj, INotifyPropertyChanged
     {
         #region VARIABLES MEMBRES
-        public List<Coordonnees> _collectionDeCoordonnees;
+        private List<Coordonnees> _collectionDeCoordonnees;
         private string _couleur;
         private int _epaisseur;
         private int _nbPoints;
@@ -20,24 +23,60 @@ namespace MyCartographyObj
         #endregion
 
         #region PROPRIETE
+        public List<Coordonnees> CollectionDeCoordonnes
+        {
+            set
+            {
+                if(value != _collectionDeCoordonnees)
+                {
+                    if(value == null)
+                    {
+                        _collectionDeCoordonnees = new List<Coordonnees>();
+                        OnPropertyChanged();
+                    }
+                    else
+                    {
+                        _collectionDeCoordonnees = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+            get { return _collectionDeCoordonnees; }
+        }
         public Color Couleur
         {
-            set { _couleur = value.ToString(); }
+            set 
+            { 
+                _couleur = value.ToString();
+                OnPropertyChanged();
+            }
             get { return (Color)ColorConverter.ConvertFromString(_couleur); }
         }
         public string CouleurString
         {
-            set { _couleur = value; }
+            set 
+            { 
+                _couleur = value;
+                OnPropertyChanged();
+            }
             get { return _couleur; }
         }
         public int Epaisseur
         {
-            set { _epaisseur = value; }
+            set 
+            { 
+                _epaisseur = value;
+                OnPropertyChanged();
+            }
             get { return _epaisseur; }
         }
         public string NomTrajet
         {
-            set { _nomTrajet = value; }
+            set 
+            { 
+                _nomTrajet = value;
+                OnPropertyChanged();
+            }
             get { return _nomTrajet; }
         }
 
@@ -52,7 +91,7 @@ namespace MyCartographyObj
         }
         public Polyline(List<Coordonnees> newCoordonnees, Color newColeur, int newEpaisseur) : base()
         {
-            _collectionDeCoordonnees = newCoordonnees;
+            CollectionDeCoordonnes = newCoordonnees;
             Couleur = newColeur;
             Epaisseur = newEpaisseur;
             iDeCoordonneesDifferentes();
@@ -67,7 +106,7 @@ namespace MyCartographyObj
         public override string Draw()
         {
             string collectionEnUneLigne = "";
-            foreach (CartoObj o in _collectionDeCoordonnees)
+            foreach (CartoObj o in CollectionDeCoordonnes)
             {
                 collectionEnUneLigne += "\n\t" + o.Draw();
             }
@@ -77,11 +116,11 @@ namespace MyCartographyObj
         private void iDeCoordonneesDifferentes()
         {
             int i = 0;
-            if (_collectionDeCoordonnees == null) { Console.WriteLine("Pas de Coordonnees (iDeCoordonneesDifferentes, POLYLINE)"); }
+            if (CollectionDeCoordonnes == null) { Console.WriteLine("Pas de Coordonnees (iDeCoordonneesDifferentes, POLYLINE)"); }
             else
             {
                 List<int> id_differents = new List<int>();
-                foreach (Coordonnees c in _collectionDeCoordonnees)
+                foreach (Coordonnees c in CollectionDeCoordonnes)
                 {
                     var value = id_differents;
                     if (!ContainsValue(value, c.Id))//si l'id du point de coordonnées n'est pas dans la liste, --> incrémenter le nombre de points
@@ -98,10 +137,10 @@ namespace MyCartographyObj
         {
             int i;
             bool ret_val;
-            for (i = 0; i < (_collectionDeCoordonnees.Count - 1); i++)
+            for (i = 0; i < (CollectionDeCoordonnes.Count - 1); i++)
             {
-                Coordonnees pointA = new Coordonnees(this._collectionDeCoordonnees[i].Latitude, this._collectionDeCoordonnees[i].Longitude);
-                Coordonnees pointB = new Coordonnees(this._collectionDeCoordonnees[i+1].Latitude, this._collectionDeCoordonnees[i+1].Longitude);
+                Coordonnees pointA = new Coordonnees(this.CollectionDeCoordonnes[i].Latitude, this.CollectionDeCoordonnes[i].Longitude);
+                Coordonnees pointB = new Coordonnees(this.CollectionDeCoordonnes[i+1].Latitude, this.CollectionDeCoordonnes[i+1].Longitude);
                 
                 ret_val = CartoObj.IsPointClosePourUneDroiteAB(coordonneesPoint, pointA, pointB, precision);
 
@@ -114,22 +153,22 @@ namespace MyCartographyObj
         {
             double valMax_X = 0, valMax_Y = 0, valMin_X, valMin_Y;
             int i;
-            for (i = 0; i < _collectionDeCoordonnees.Count; i++)
+            for (i = 0; i < CollectionDeCoordonnes.Count; i++)
             {
-                if (valMax_X < _collectionDeCoordonnees[i].Latitude)
-                    valMax_X = _collectionDeCoordonnees[i].Latitude;
-                if (valMax_Y < _collectionDeCoordonnees[i].Longitude)
-                    valMax_Y = _collectionDeCoordonnees[i].Longitude;
+                if (valMax_X < CollectionDeCoordonnes[i].Latitude)
+                    valMax_X = CollectionDeCoordonnes[i].Latitude;
+                if (valMax_Y < CollectionDeCoordonnes[i].Longitude)
+                    valMax_Y = CollectionDeCoordonnes[i].Longitude;
             }
 
             valMin_X = valMax_X;
             valMin_Y = valMax_Y;
-            for (i = 0; i < _collectionDeCoordonnees.Count; i++)
+            for (i = 0; i < CollectionDeCoordonnes.Count; i++)
             {
-                if (valMin_X > _collectionDeCoordonnees[i].Latitude)
-                    valMin_X = _collectionDeCoordonnees[i].Latitude;
-                if (valMin_Y > _collectionDeCoordonnees[i].Longitude)
-                    valMin_Y = _collectionDeCoordonnees[i].Longitude;
+                if (valMin_X > CollectionDeCoordonnes[i].Latitude)
+                    valMin_X = CollectionDeCoordonnes[i].Latitude;
+                if (valMin_Y > CollectionDeCoordonnes[i].Longitude)
+                    valMin_Y = CollectionDeCoordonnes[i].Longitude;
             }
 
             double [] longueurCote = new double[4];
@@ -169,9 +208,9 @@ namespace MyCartographyObj
             int i = 0;
             double somme = 0;
 
-            for(i=0; i<(_collectionDeCoordonnees.Count-1); i++)
+            for(i=0; i<(CollectionDeCoordonnes.Count-1); i++)
             {                
-                somme = somme + MathUtilFct.LongueurD_unSegment(this._collectionDeCoordonnees[i].Latitude, this._collectionDeCoordonnees[i].Longitude, this._collectionDeCoordonnees[i + 1].Latitude, this._collectionDeCoordonnees[i + 1].Longitude);               
+                somme = somme + MathUtilFct.LongueurD_unSegment(this.CollectionDeCoordonnes[i].Latitude, this.CollectionDeCoordonnes[i].Longitude, this.CollectionDeCoordonnes[i + 1].Latitude, this.CollectionDeCoordonnes[i + 1].Longitude);               
             }
             
             return somme;
@@ -185,7 +224,7 @@ namespace MyCartographyObj
         {
             if(other != null)
             {
-                if (this.Id == other.Id && this._collectionDeCoordonnees == other._collectionDeCoordonnees && this.Couleur == other.Couleur && this.Epaisseur == other.Epaisseur)
+                if (this.Id == other.Id && this.CollectionDeCoordonnes == other.CollectionDeCoordonnes && this.Couleur == other.Couleur && this.Epaisseur == other.Epaisseur)
                 {
                     return true;
                 }

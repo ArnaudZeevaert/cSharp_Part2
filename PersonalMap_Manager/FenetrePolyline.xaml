@@ -1,0 +1,189 @@
+﻿<Window x:Class="PersonalMap_Manager.FenetrePolyline"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PersonalMap_Manager"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+        mc:Ignorable="d"        
+        Title="fenetrePOI" 
+        AllowsTransparency="True" WindowStyle="None" 
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen" BorderBrush="Black" Loaded="Window_Loaded" >
+    <Window.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="MaxHeight" Value="75" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Trigger.Setters>
+                        <Setter Property="Opacity" Value="1.0" />
+                    </Trigger.Setters>
+                </Trigger>
+                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:0.2"
+              Storyboard.TargetProperty="MaxHeight"
+              To="90"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:1"
+              Storyboard.TargetProperty="MaxHeight"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Image Source="./Ressources/trajetIcon.png"></Image>
+                    <Label Content="Polyline" FontFamily="Consolas" FontSize="19"></Label>
+                </StackPanel>
+            </DockPanel>
+            <Thumb Grid.Row="0" Opacity="0" Background="Transparent" Foreground="{x:Null}" DragDelta="MainHeaderThumb_OnDragDelta"/>
+            <DockPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Width="32" Height="32" Click="ButtonClose_OnClick"
+                            ToolTip="annuler les changements et fermer la fenêtre">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/croix.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+
+            <UniformGrid Grid.Row="1" Rows="1" Columns="2">
+                <StackPanel Grid.Column="0">
+                    <Label Content="ID :" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Label Content="Nom trajet:" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Label Content="Couleur:" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Label Content="Epaisseur:" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <Label x:Name="idLabel" Content="" 
+                               MinHeight="30" Height="auto" 
+                               FontFamily="Unispace" FontSize="22" 
+                               HorizontalContentAlignment="Center"/>
+                    <TextBox x:Name="TextBoxTrajet"  Text=""  
+                                 Background="Transparent" 
+                                 BorderBrush="Black" BorderThickness="1" 
+                                 FontFamily="Unispace" FontSize="20" 
+                                 HorizontalContentAlignment="Center" 
+                                 VerticalContentAlignment="Center" Foreground="Gray"/>
+                    <ComboBox x:Name="ComboBoxCouleurs" 
+                                  SelectedItem="{Binding Couleur}" 
+                                  Height="30"
+                                  VerticalContentAlignment="Center" 
+                                  FontFamily="Unispace" FontSize="18" 
+                                  Background="Transparent" 
+                                  Foreground="Gray" BorderBrush="White" BorderThickness="1"/>
+                    <TextBox x:Name="TextBoxEpaisseur" Text="" 
+                                 Background="Transparent" 
+                                 BorderBrush="Black" BorderThickness="1" 
+                                 FontFamily="Unispace" FontSize="20" 
+                                 HorizontalContentAlignment="Center" 
+                                 VerticalContentAlignment="Center" Foreground="Gray" MinWidth="50"/>
+                </StackPanel>
+            </UniformGrid>
+            
+            <UniformGrid Grid.Row="2" Rows="1" Columns="2">
+                <StackPanel Grid.Column="0">
+                    <Label Content="Liste de Coordonnées:" FontFamily="Unispace" FontSize="22" HorizontalContentAlignment="Center"/>
+                    <Button x:Name="ModifierCoordonnee" Click="ModifierCoordonnee_Click" Height="50" Width="50" ToolTip="Modifier la coordonnée sélectionnée">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/edit.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button x:Name="SupprimerCoordonnee" Click="SupprimerCoordonnee_Click" Height="50" Width="50" ToolTip="Supprimer la coordonnée sélectionnée">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/delete.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button x:Name="AjouterCoordonnee" Click="AjouterCoordonnee_Click" Height="50" Width="50" ToolTip="Ajouter une coordonnée à la collection">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/add.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button x:Name="DetailsCoordonnee" Click="DetailsCoordonnee_Click" Height="50" Width="50" ToolTip="Afficher les caractéristiques complètes de la coordonnées sélectionnée">
+                        <Button.Background>
+                            <ImageBrush ImageSource="./Ressources/details.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <ListBox x:Name="ListBox"  
+                                     BorderBrush="Black" 
+                                     Height="250" Width="200"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ItemContainerStyle="{DynamicResource _ListBoxItemStyle}"/>
+                </StackPanel>
+            </UniformGrid>
+
+            <UniformGrid Grid.Row="3" Rows="1">
+                <Button x:Name="ButtonAnnuler"
+                        Grid.Column="0"
+                        ToolTip="annuler les changements sans fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" 
+                        Click="ButtonAnnuler_Click" 
+                        Content="Annuler"                         
+                        Background="Red" 
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"/>
+                <Button x:Name="ButtonAppliquer" 
+                        Grid.Column="1"
+                        ToolTip="appliquer les changements sans fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch" 
+                        Click="ButtonAppliquer_Click" 
+                        Content="Appliquer"                         
+                        Background="Green" 
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace"
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"/>
+                <Button x:Name="ButtunOk" 
+                        Grid.Column="2"
+                        ToolTip="appliquer les changements et fermer la fenêtre"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Click="ButtunOk_Click" 
+                        Content="OK"                          
+                        Background="Transparent"
+                        BorderBrush="Black" BorderThickness="2" 
+                        FontSize="14" FontFamily="Unispace" 
+                        HorizontalContentAlignment="Center" 
+                        VerticalContentAlignment="Center" Foreground="Black"/>
+            </UniformGrid>
+
+        </Grid>
+    </Border>
+
+
+</Window>

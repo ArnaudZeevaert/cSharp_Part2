@@ -5,15 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonalMap_Manager"        
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         mc:Ignorable="d"       
-        Title="Fenêtre Principale" SizeToContent="WidthAndHeight" MinHeight="500" MinWidth="500"      
-        Closed="Window_Closed">
-  
+        Title="Fenêtre Principale" 
+        SizeToContent="WidthAndHeight" MinHeight="500" MinWidth="500"      
+        Closed="Window_Closed" 
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="MaxHeight" Value="75" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Trigger.Setters>
+                        <Setter Property="Opacity" Value="1.0" />
+                    </Trigger.Setters>
+                </Trigger>
+                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:0.2"
+              Storyboard.TargetProperty="MaxHeight"
+              To="90"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:1"
+              Storyboard.TargetProperty="MaxHeight"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid x:Name="MyGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="117*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0">
@@ -83,27 +123,62 @@
                 <Button x:Name="tbModifier" ToolTip="Modifier l'élément sélectionné (listBox)" Click="tbModifier_Click" Width="48">
                     <Image Source="./ressources/edit.png"/>
                 </Button>
+                <Button x:Name="tbAfficher" ToolTip="Afficher l'élément sélectionné (listBox) sur la carte" Click="tbAfficher_Click" Width="48">
+                    <Image Source="./ressources/affichageCarte.png"/>
+                </Button>
+                <Separator/>
+                <Label Width="29" Height="29" ToolTip="Ajouter un POI ou Polyline par double clique">
+                    <Label.Background>
+                        <ImageBrush ImageSource="./Ressources/add.png"/>
+                    </Label.Background>
+                </Label>
+                <ComboBox x:Name="comboNewElem">
+                    <ComboBoxItem>POI</ComboBoxItem>
+                    <ComboBoxItem>POLYLINE</ComboBoxItem>
+                </ComboBox>
+                <Button x:Name="tbStopAdd" ToolTip="Stopper l'ajout de POI au trajet" Click="tbStopAdd_Click" Width="48" Height="48">
+                    <Image Source="./ressources/croixRouge.png" Width="48" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Button>
             </ToolBar>
         </ToolBarTray>
 
-        
-
         <Grid x:Name="MyGrid2" Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*"/>
-                <ColumnDefinition Width="246*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0">
-                <Label x:Name="NomListBox" Content="List IcartoObj : " BorderBrush="Black"/>
-                <ListBox x:Name="ListBox" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderBrush="Black" MinHeight="19" />
-                <Separator/>
-                <Label x:Name="TextDebug" Height="auto"/>
-            </StackPanel>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Rectangle x:Name="FUTUr_carte_bing" Fill="ForestGreen" Grid.Column="1"/>
+                <Label x:Name="NomListBox"
+                       Grid.Row="0"
+                       Content="List IcartoObj : " 
+                       BorderBrush="Black"
+                       BorderThickness="2"
+                       Width="200"/>
+
+                <ListBox x:Name="ListBox"
+                         Grid.Row="1"
+                         HorizontalContentAlignment="Stretch" 
+                         VerticalContentAlignment="Stretch" 
+                         BorderBrush="Black"                          
+                         ItemContainerStyle="{DynamicResource _ListBoxItemStyle}"
+                         Width="200" Height="auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+            </Grid>
+
+            <m:Map x:Name="Carte" 
+                   Grid.Column="1" 
+                   CredentialsProvider="AnN_Xux1pEj1XIOkXIeRjQOWrVDP7aAxRDLEpeJ0DBEctGzj7lVNrukgGEZWJ38A" 
+                   Center="50.632557, 5.579666" ZoomLevel="12"
+                   MouseDoubleClick="Map_DoubleClick"
+                   Width="auto"
+                   Height="auto"/>
         </Grid>
-
     </Grid>
-
 </Window>

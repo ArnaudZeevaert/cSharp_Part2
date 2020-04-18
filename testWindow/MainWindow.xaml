@@ -6,95 +6,72 @@
         xmlns:local="clr-namespace:testWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="500">
-    <!--<Grid x:Name="MyGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="117*"/>
-        </Grid.RowDefinitions>
-
-        <DockPanel Grid.Row="0">
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File" MinWidth="39" MinHeight="35" Height="35">
-                    <MenuItem x:Name="menu_file_open" Header="_Open" InputGestureText="Ctrl+O" Click="MenuFileOpen_Click"/>
-                    <MenuItem x:Name="menu_file_save" Header="_Save" InputGestureText="Ctrl+S" Click="MenuFileSave_Click">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/saveIcon.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem x:Name="menu_file_POI" Header="_POI">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/poiIcon.png"/>
-                        </MenuItem.Icon>
-                        <MenuItem x:Name="menu_file_POI_import" Header="Import" StaysOpenOnClick="True" Click="MenuFilePOIImport_Click"/>
-                        <MenuItem x:Name="menu_file_POI_export" Header="Export" StaysOpenOnClick="True" Click="MenuFilePOIExport_Click"/>
-                    </MenuItem>
-
-                    <MenuItem x:Name="menu_file_trajet" Header="_Trajet">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/trajetIcon.png"/>
-                        </MenuItem.Icon>
-                        <MenuItem x:Name="menu_file_trajet_import" Header="Import" StaysOpenOnClick="True" Click="MenuFileTrajetImport_Click"/>
-                        <MenuItem x:Name="menu_file_trajet_export" Header="Export" StaysOpenOnClick="True" Click="MenuFileTrajetExport_Click"/>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem x:Name="menu_file_exit" Header="E_xit" InputGestureText="Ctrl+X" Click="MenuFileExit_Click">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/exitIcon.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-
-                <MenuItem Header="_Tools" MinWidth="39" MinHeight="35" Height="35">
-                    <MenuItem x:Name="menu_tools_options" Header="_Options" Click="MenuToolsOptions_Click">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/settingIcon.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem x:Name="menu_tools_about" Header="_About" Click="MenuToolsAbout_Click">
-                        <MenuItem.Icon>
-                            <Image Source="./ressources/informationIcon.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-
-            </Menu>
-        </DockPanel>
-
-        <Separator/>
-
-        <ToolBarTray Grid.Row="1">
-            <ToolBar>
-                <Button x:Name="tbOpen" ToolTip="Open File" Click="MenuFileOpen_Click">
-                    <Image Source="./ressources/OpenFolder_16x.png"/>
-                </Button>
-                <Button x:Name="tbSave" ToolTip="Save File" Click="MenuFileSave_Click">
-                    <Image Source="./ressources/SaveStatusBar7_16x.png"/>
-                </Button>
-                <Button x:Name="tbDelete" ToolTip="Supprimer l'élément sélectionné (listBox)" Click="DeleteSelectItem_Click" Width="48">
-                    <Image Source="./ressources/delete.png"/>
-                </Button>
-            </ToolBar>
-        </ToolBarTray>
-
-        <Separator/>
-
-        <Grid x:Name="MyGrid2" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*"/>
-                <ColumnDefinition Width="246*"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0">
-                <Label x:Name="NomListBox" Content="List IcartoObj : " BorderBrush="Black"/>
-                <ListBox x:Name="ListBox" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" BorderBrush="Black" MinHeight="19" />
-                <Separator/>
-                <Label x:Name="TextDebug" Height="auto"/>
-            </StackPanel>
-
-            <Rectangle x:Name="FUTUr_carte_bing" Fill="ForestGreen" Grid.Column="1"/>
-        </Grid>
-
-    </Grid>-->
+    <Window.Resources>
+        <!--<Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="2"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background">
+                                    <Setter.Value>
+                                        <ImageBrush ImageSource="sansFond.png"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="Red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Opacity" Value="0.5" />
+            <Setter Property="MaxHeight" Value="75" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Trigger.Setters>
+                        <Setter Property="Opacity" Value="1.0" />
+                    </Trigger.Setters>
+                </Trigger>
+                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:0.2"
+              Storyboard.TargetProperty="MaxHeight"
+              To="90"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+              Duration="0:0:1"
+              Storyboard.TargetProperty="MaxHeight"  />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <ListBox ItemContainerStyle="{DynamicResource _ListBoxItemStyle}"
+                 Width="200" Height="250"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListBoxItem>Hello</ListBoxItem>
+            <ListBoxItem>Hi</ListBoxItem>
+        </ListBox>
+    </Grid>
 </Window>

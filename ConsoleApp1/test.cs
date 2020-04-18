@@ -92,7 +92,7 @@ namespace ConsoleApp1
             tabCoordonnees2.Add(C1);
             tabCoordonnees2.Add(C2);
             tabCoordonnees2.Add(C1);
-            P1._collectionDeCoordonnees = tabCoordonnees2;
+            P1.CollectionDeCoordonnes = tabCoordonnees2;
             Console.WriteLine("P1: ");
             Console.WriteLine(P1.GetNbPoints());
 
@@ -115,8 +115,8 @@ namespace ConsoleApp1
             else { Console.WriteLine("Point pas proche..."); }
 
             Polyline droiteTest = new Polyline();
-            droiteTest._collectionDeCoordonnees.Add(new Coordonnees(1, 1));
-            droiteTest._collectionDeCoordonnees.Add(new Coordonnees(4, 2));
+            droiteTest.CollectionDeCoordonnes.Add(new Coordonnees(1, 1));
+            droiteTest.CollectionDeCoordonnes.Add(new Coordonnees(4, 2));
             Console.WriteLine("Coordonnées de la droite : ");
             droiteTest.Draw();
             Console.WriteLine("IsPointClose avec cette droite : avec 2,2 et une precision de 1");
@@ -241,7 +241,7 @@ namespace ConsoleApp1
             Console.WriteLine("---------------------------------------------------------------------");
             List<Polyline> listeGeneriquePolyline = new List<Polyline>();
             listeGeneriquePolyline.Add(P1);
-            P2._collectionDeCoordonnees = tabCoordonnees3;
+            P2.CollectionDeCoordonnes = tabCoordonnees3;
             listeGeneriquePolyline.Add(P2);
             listeGeneriquePolyline.Add(P3);
             listeGeneriquePolyline.Add(new Polyline(tabCoordonnees, Colors.Black, 19));

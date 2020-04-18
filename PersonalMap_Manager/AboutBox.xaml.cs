@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Microsoft.Win32;
 using System.Globalization;
+using MyCartographyObj;
 
 namespace PersonalMap_Manager
 {
@@ -15,10 +16,17 @@ namespace PersonalMap_Manager
     /// </summary>
     public partial class AboutBox : Window
     {
+
         public AboutBox()
         {
             InitializeComponent();
             GetInformations();
+        }
+        public AboutBox(MyPersonalMapData personneConnectee)
+        {
+            InitializeComponent();
+            GetInformations();
+            TextBlockInfoPersonneConnectee.Text = personneConnectee.ToString();          
         }
         private void MainHeaderThumb_OnDragDelta(object sender, DragDeltaEventArgs e)
         {

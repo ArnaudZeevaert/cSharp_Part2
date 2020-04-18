@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Linq;
+
 using System.Text;
 using System.Threading.Tasks;
 using getNewId;
@@ -8,7 +11,7 @@ using getNewId;
 namespace MyCartographyObj
 {
     [Serializable]
-    public abstract class CartoObj
+    public abstract class CartoObj : INotifyPropertyChanged
     {
         #region VARIABLES MEMBRES   
         private int _id;        
@@ -17,7 +20,14 @@ namespace MyCartographyObj
         #region PROPRIETES
         public int Id
         {
-            set { _id = value; }
+            set 
+            {
+                if (value != _id)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
             get { return _id; }
         }
         #endregion
@@ -55,7 +65,6 @@ namespace MyCartographyObj
                 return false;
             }
         }
-
         protected static bool IsPointClosePourUneDroiteAB (Coordonnees coordonneesPoint, Coordonnees pointA, Coordonnees pointB, double precision)
         {
             //1 tester si le point recherché est proche de A ou de B ?
@@ -132,6 +141,15 @@ namespace MyCartographyObj
             return false;
         }
 
-        #endregion        
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

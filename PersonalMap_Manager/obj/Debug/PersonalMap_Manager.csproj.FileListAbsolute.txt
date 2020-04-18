@@ -32,3 +32,9 @@ D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\AboutBox.g.cs
 D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\AboutBox.baml
 D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\bin\Debug\getNewId.dll
 D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\bin\Debug\getNewId.pdb
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\bin\Debug\Microsoft.Maps.MapControl.WPF.dll
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\bin\Debug\Microsoft.Maps.MapControl.WPF.xml
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\fenetrePOI.g.cs
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\fenetrePOI.baml
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\FenetrePolyline.g.cs
+D:\C#projets\ARNAUD_ZEEVAERT_2226\PersonalMap_Manager\obj\Debug\FenetrePolyline.baml

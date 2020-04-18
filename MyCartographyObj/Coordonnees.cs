@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using MathUtil;
 
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace MyCartographyObj
 {
     [Serializable]
-    public class Coordonnees : CartoObj, IisPointClose
+    public class Coordonnees : CartoObj, IisPointClose, INotifyPropertyChanged
     {
         #region VARIABLES_MEMBRES
         protected double _latitude;
@@ -19,13 +22,27 @@ namespace MyCartographyObj
         public double Latitude
         {
             get { return _latitude; }
-            set { _latitude = value; }
+            set 
+            {
+                if (value != _latitude)
+                {
+                    _latitude = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public double Longitude
         {
             get { return _longitude; }
-            set { _longitude = value; }
+            set 
+            {
+                if (value != _longitude)
+                {
+                    _longitude = value;
+                    OnPropertyChanged();
+                }
+            }
         }
         #endregion
 
